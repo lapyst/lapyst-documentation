@@ -1,0 +1,14 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Lapyst Documentation
+
+This document is part of the lapyst documentation. It covers all standard aspects of
+the lapyst language this includes (but not limited to): the syntax, the standard compiler,
+the packagemanager & buildsystem spark, technical specifications for various backends and so on.
+
+toc::[]
+
+include::syntax.adoc[leveloffset=1]
