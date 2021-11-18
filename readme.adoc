@@ -1,6 +1,7 @@
 :icons: font
 :source-highlighter: rouge
 :toc:
+:toclevels: 4
 :toc-placement!:
 
 = Lapyst Documentation
@@ -11,4 +12,4 @@ the packagemanager & buildsystem spark, technical specifications for various bac
 
 toc::[]
 
-include::syntax.adoc[leveloffset=1]
+include::syntax.adoc[leveloffset=+1]

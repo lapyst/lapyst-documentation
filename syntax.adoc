@@ -36,10 +36,10 @@ This is an very-very special character: it tells lapyst that an portion of the c
 It's hard to explain this right at the start, you get it when we move further. The only thing to rember is that this character itself does not modify your data or anything. It's for lapyst to find yout when an portion of code ends and it can take it and do it's magic.
 
 // Literals
-include::syntax/literals.adoc[leveloffset=1]
+include::syntax/literals.adoc[leveloffset=+1]
 
 // Operators
-include::syntax/operators.adoc[leveloffset=1]
+include::syntax/operators.adoc[leveloffset=+1]
 
 == Declaration of Variables
 
@@ -165,16 +165,16 @@ Type-less constants are possible but they have no benefit over typed constants, 
 ====
 
 // Functions
-include::syntax/functions.adoc[leveloffset=1]
+include::syntax/functions.adoc[leveloffset=+1]
 
 // Branching
-include::syntax/branching.adoc[leveloffset=1]
+include::syntax/branching.adoc[leveloffset=+1]
 
 // Loops
-include::syntax/loops.adoc[leveloffset=1]
+include::syntax/loops.adoc[leveloffset=+1]
 
 // Error handling
-include::syntax/error_handling.adoc[leveloffset=1]
+include::syntax/error_handling.adoc[leveloffset=+1]
 
 == Templates / Classes
 
@@ -264,7 +264,7 @@ a.make_noise(); <1>
 Methods also supports the same parameter and return functionalities we know from functions.
 
 // self keyword
-include::syntax/templates/self.adoc[leveloffset=2]
+include::syntax/templates/self.adoc[leveloffset=+2]
 
 === Inheritance
 
@@ -388,8 +388,8 @@ end
 
 As shown above, the level is counted from the template that define the protection onwards.
 
-include::syntax/templates/super.adoc[leveloffset=2]
-include::syntax/templates/generics.adoc[leveloffset=2]
+include::syntax/templates/super.adoc[leveloffset=+2]
+include::syntax/templates/generics.adoc[leveloffset=+2]
 
 // Roles
-include::syntax/roles.adoc[leveloffset=1]
+include::syntax/roles.adoc[leveloffset=+1]
