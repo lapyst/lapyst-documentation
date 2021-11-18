@@ -1,0 +1,65 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Annotations
+
+With annotation it's possible in lapyst to annotate (or to add) metadata to key constructs of the lapyst language.
+
+toc::[]
+
+== Usage
+
+Lets first look at how to write the annotation itself:
+
+[source,lapyst]
+----
+@some_annotation <1>
+
+@some_annotation{number=12}
+----
+<1> The annotation `some_annotation`, without parameters
+<2> The annotation `some_annotation`, this time with parameters: We set the parameter `number` to the number `12`.
+
+Annotation itself can be placed at many places:
+
+[source,lapyst]
+----
+@namespace_annotation
+namespace Test
+
+    @template_annotation
+    template MyTempl
+
+        @field_annotation
+        var int field;
+
+        @method_annotation
+        def method()
+        end
+
+    end
+
+    @variable_annotation
+    var int variable;
+
+    @function_annotation
+    def myFunction(
+        @param_annotation int param1
+    )
+    end
+
+    def (@return_annotation int) myOtherFunction()
+    end
+
+end
+
+@function_annotation
+def someFunction()
+
+    @variable_annotation
+    var int i;
+
+end
+----

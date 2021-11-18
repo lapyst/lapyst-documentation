@@ -1,0 +1,189 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Loops
+
+toc::[]
+
+== While-Loops
+
+While loops are the simpliest kind of loops: they continue the code in them until their condition is not true anymore.
+
+For example:
+
+[source,lapyst]
+----
+var int i = 0
+while (i < 10) do
+    // ...
+    i += 1;
+end
+----
+
+This while loop executes the code between the `do` and the `end` keyword until the condition (`i < 10`) is no longer true.
+
+IMPORTANT: An while loop can also have the condtion `true`, which makes an loop that never ends! You need to use other features then to break out, for example `return`.
+
+The loop above is an so called head-controlled loop, because the "controller" (the condition) as at the top of the loop, this means to that we always check at the beginning of an iteration if the condition is still true, when not we resume execution after the `end` keyword. This also means when we would set `i` to an initital value of `10`, the loop would never run a single time.
+
+If you want a loop run at least a single time, you need an tail-controlled loop:
+
+[source,lapyst]
+----
+var int i = 0
+do
+    // ...
+    i += 1;
+while (i < 10) end
+----
+
+This loops first runs the loop's body (from `do` to the `while`) and then checks if the condition is true, when it is its once again executes the loop's body, if not it simple resumes normal execution after the `end`.
+
+== for-loop / Iterative-Loops
+
+Iterative loops characterized by the fact that they iterate over some sort of range. This can either be an numeric range, or an simple range of elements via an so called "enumerator" . Lapyst has syntax for both of them.
+
+=== Numeric For-Loop
+
+Let's start with the little more common one: the numeric range.
+
+[source,lapyst]
+----
+for int i in 1 to 10 step 2 do
+    // ...
+end
+----
+
+This loop declares that the variable `i` should hold the current iteration number, which is of type `int`. The iteration itself should begin with 1 and stop at 10 (including 10) with an step-size of 2.
+
+NOTE: In numeric based loops the iteration variable must be an numeric type.
+
+We also can drop the `step 2` part; the loop then defaults to a stepsize of `1`:
+
+[source,lapyst]
+----
+for int i in 1 to 10 do
+    // ...
+end
+----
+
+We also can drop the type of the iteration variable; lapyst then picks one suited for the numeric range:
+
+[source,lapyst]
+----
+for i in 1 to 10 do
+    // ...
+end
+----
+
+=== Enumerating For-Loop
+
+The enumerating for-loop is a litte more mightier than the numeric one: it supports multiple iteration variables, but lets start simple:
+
+[source,lapyst]
+----
+for j in arr do
+    // ...
+end
+----
+
+This code declares an iteration variable `j` which type depends on the values that `arr` contains. If, for example, `arr` is an typed array with the type `array[int]` then `j` would be automatically a `int`. If `arr` is on the other hand an type-less array, then `j` would also be type-less thus enforcing to write the loop like this.
+
+But we also can type `j` (if the enumerator `arr` can ensure that it's values only are one type):
+
+[source,lapyst]
+----
+for int j in arr do
+    // ...
+end
+----
+
+Now this is how you enumerate over an array, but wat about maps? You use them simmilary, but here it works like the `return` keyword:
+
+[source,lapyst]
+----
+for key,val in map do
+    // ...
+end
+----
+
+The enumerator of an map "returns" two things: the first one it the key, the second is the value for this key. So we can write `key,val in map` like we would wor an function that returns two things.
+
+But it dosnt stop there: this type of loop also supports arbitary numbers of iteration variables like the an function can return. They also share the same feature when not enough varaibles to assign to are available: the last one gets assigned an array in which all the remaining returns are. So we could also write this:
+
+[source,lapyst]
+----
+for entry in map do
+    // ...
+end
+----
+
+Since the enumerator of an map "returns" the key and the value, and we only give it one variable to assign to, it automatically makes an array where the first element is the key and the last element is the value, and assign it to the variable `entry`.
+
+NOTE: to learn more about how to actually implement an enumerator see the documentation of the standard libary under Enumerator.
+
+== flow control
+
+Since we learned before that there are loops that potentially never end such as this one:
+
+[source,lapyst]
+----
+while true do
+    // ...
+end
+----
+
+We need some other forms of controlling the flow of the loop. The keywords you now learn can also been applied to nearly all type of loops.
+
+=== break & next
+
+With the `break;` keyword, you can "break-out" a loop and exit it entirely; the execution resumes then normaly after the end of the loop, like we would when we hit the condition:
+
+[source,lapyst]
+----
+while true do
+    var int i = get_int_from_somewhere();
+    break if (i > 10); <1>
+end
+----
+<1> This line is an postfix if, that executes `break` and thus ending the endless-loop when `i` is greater than 10.
+
+But break only exits the loop entirely, what if we simply want to skip the rest of an iteration? Thats were `next` is for:
+
+[source,lapyst]
+----
+for i in arr do
+    next if (i > 10); <1>
+    printf("%d\n", i);
+end
+----
+<1> This code executes the `next` keyword if `i` is greater than 10.
+
+The code above would only print out numbers in an array that are lower or equal to 10.
+
+=== redo
+
+The `redo` keyword is only used in iterational-loops (`for`-loops); it simply tells the loop not to use the next value on the next iteration but rather to redo the current iteration with the current value:
+
+[source,lapyst]
+----
+for i in 1 to 10 do
+    printf("Iteration %d\n", i);
+    redo if (i == 3);
+end
+----
+
+The code above would count to 3 and then infinitly redos the loop with the value `3`.
+This in itself would not be very usefull but consider this example:
+
+[source,lapyst]
+----
+for job in jobs do
+    var status = job.execute();
+    redo if (status != "success");
+end
+----
+
+This code is a bit more usefull: it iterates over all jobs, executes them with `job.execute()` which returns the status of the job. We save this in the variable `status` and then call the `redo` if the status isn't `"success"`. Thus redoing the iteration with the same job, which then executes the job again. We effectivly programmed now a loop that retrys a job until it succeeds.

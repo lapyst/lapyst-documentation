@@ -1,0 +1,124 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Literals
+
+The building blocks of every language, they express the native datatypes of an language.
+
+toc::[]
+
+== Numbers
+
+Numbers in lapyst are written like in pretty much every other language (this includes english this time!):
+
+[source,lapyst]
+----
+12 <1>
+23.22 <2>
+----
+<1> Integer (non-fractional number)
+<2> Floatingpoint number (number with fractional part)
+
+Floatingpoint numbers (or floats as we will call them from now on) are always Decimal based.
+
+Integers on the other hand only defaults to the decimal representation. Lapyst include a bunch of others, each one with it's own prefix:
+
+[source,lapyst]
+----
+1234567890 <1>
+0x123456789ABCDEF0 <2>
+0o12345670 <3>
+0b10 <4>
+----
+<1> Decimal (10) based integer
+<2> Hexa-decimal (16) based integer (prefix `0x`)
+<3> Octal (8) based integer (prefix `0o`)
+<4> Binary (2) based integer (prefix `0b`)
+
+For readability lapyst also supports an `_` underscore between the letters of each number (but not in the prefix!):
+
+[source,lapyst]
+----
+0b01000100_10000100 // this is valid
+0_b0100010010000100 // this is not; underscore is inside prefix
+----
+
+== Booleans
+
+Booleans are a simple datatype to express truthiness, this means they can either be `true` or `false`. These are by the way also the keywords in lapyst for the both only valid states of an boolean:
+
+[source,lapyst]
+----
+true    // also known as 'yes' or '1'
+false   // also known as 'no' or '0'
+----
+
+== Variables
+
+Variables are to be honest not an literal in the sense they express an native datatype,
+but its an buildingblock nontheless, and the most important too!
+
+Variables in lapyst needs to be "declared" which means they dont exits when you dont tell lapyst about them. To know how to do this read Declaration of Variables. For now you only need to know they need to be declared. The name of an variable is also called an "identifier".
+
+=== Identifiers
+
+There are a few rules for a identifier:
+
+- the name cannot be a keyword (such as `true`, `false` or `end`)
+- they need to only have alphanumerical characters in them (or underscores)
+- they cannot have an whitespace or an linebreak in them
+- they cannot start with an number
+
+== Strings
+
+Lapyst only supports one type of string literal: double-quoted.
+Note: in lapyst all strings are multiline strings.
+
+[source,lapyst]
+----
+"Hello, world!"
+
+"Good morning, ${name}!" <1>
+----
+<1> This string uses interpolation, this means at the position of `${name}` the stringified value of the variable `name` is inserted.
+
+Strings also allow for escape characters:
+[source,lapyst]
+----
+"\n"    // line break
+"\t"    // tabulator
+"\r"    // cariage return
+"\\"    // the character \ but since it's also used to denote escape
+        // character we simply use them double to get the character itself.
+----
+
+== Nil
+
+Lapyst supports nullni-ness or rather nilni-ness, which means that variables can have a state of "nothing", where they hold... nothing. This is typically the case right after you decalred a variable but assignent nothing to it.
+
+You can use the literal `nil` to check if a variable indeed holds nothing, or to reset an variable to this state of nothingness. This will also destroy objects an free them if neccessary.
+
+[source,lapyst]
+----
+i === nil <1>
+i = nil <2>
+----
+<1> checks if i has nothing in it. See Comparison operators on what `===` is.
+<2> resets i to a state where it has nothing in it.
+
+== Regex
+
+Regexes (or regular expressions) are in lapyst first-class datatypes.
+This means they have their own syntax too: they work a little like strings, but they dont support interpolation. They do howerver support to be multiline.
+
+The various flags for an regex can be expressed rigth after the regex itself.
+
+[source,lapyst]
+----
+/^hello/
+/abc/i      // case insensitive flag
+----
+
+For more information about regular expressions read the chapter about it here: Regular Expressions.

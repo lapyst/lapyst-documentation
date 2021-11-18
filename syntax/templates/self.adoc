@@ -1,0 +1,41 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= The self keyword
+
+toc::[]
+
+To access fields inside an template, you can simply use them like normal variables, since the lookup for variables propergate upwards, meaning if no variable is found in the context of the method, the next context above it (the template) is queried and so on.
+
+But what is when we have following example:
+
+[source,lapyst]
+----
+template Purse
+    var int amount;
+
+    def add_money(int amount)
+        // ... <1>
+    end
+end
+----
+<1> How should we here refer to the field `amount` to set it?
+
+The answer is simple: we use an keyword wich is also an special object that references the current instance the method is working on: `self`.
+
+[source,lapyst]
+----
+template Purse
+    var int amount;
+
+    def add_money(int amount)
+        self.amount += amount;
+    end
+end
+----
+
+Now our code is possible: `self.amount` refers to the field `amount` of the class we are in, while `amount` itself refers to the parameter `amount`.
+
+NOTE: This works for methods too!

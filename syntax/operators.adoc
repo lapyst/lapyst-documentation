@@ -1,0 +1,139 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Operators
+
+If literals are the building blocks, operators are the cement of an language: they hold together the literals and ultimatly gives them their purpose, since they "operate" on data.
+
+toc::[]
+
+== Assignments
+
+Since variables that holds nothing are a bit useless, there is the assignment operator: it's live purpose is to simply give variables data they hold:
+
+[source,lapyst]
+----
+i = 12; <1>
+----
+<1> `i` holds now the integer `12`
+
+== Arithemtic
+
+The aritmetic group of operators are performing arithmetic operations.
+They are typically supported by all numric types (intergers, floats).
+
+[source,lapyst]
+----
+a + b       // addition
+a - b       // subtraction
+a * b       // multiplication
+a / b       // division
+a % b       // modulo
+a ** b      // pow; calculates the power of `b` with the base `a`
+----
+
+They can also be combined with the assignment operator to do two things at a time: first they calculate with the content of the variable, then the result is stored in said variable.
+Note that there always be must the operator first and then the assignment operator, and also that there are no spaces allowed between them!
+
+[source,lapyst]
+----
+a += 1; <1>
+----
+<1> this first calculates `a + 1` and then stores the result in `a`. you also could write `a = a + 1` but it's a bit shorter and easier to read.
+
+== Comparison
+
+This type of operator compares two things with each other and returns an boolean value as a result. They return `true` when the comparison succeeds, and `false` otherwise. When they return `true` depends on the operator itself.
+
+[source,lapyst]
+----
+a == b  // this compares a with b and only returns true when
+        // when both are the same; note however that this operator can be overwritten! <1>
+        // for an true equal you should use the "true equal" operator below.
+
+a === b // true equal. also checks if the type of both are the same. one of the few
+        // operators that cannot be overwritten. <1>
+
+a != b  // true when a and b are different. can also be overwritten like '==' <1>
+
+a !== b // same as '===' is for '='; but this is for '!=='.
+        // this means this also checks the type of both a and b.
+        // this means also that this operator cannot be overwritten <1>
+
+/*
+    Comparisons typically supported by numeric types
+*/
+
+a > b   // checks if a is greater than b
+a < b   // checks if a is lower than b
+a >= b  // checks if a is greater or equal than b
+a <= b  // checks if a is lower or equal than b
+
+/*
+    Comparisons typically supported by string-like types
+*/
+a =~ b  // compares a against an regex. this operator is the only one that dosnt
+        // return a boolean, but rather `nil` on failure (which is falsy) and
+        // an regex result object on success (which is truthy)
+
+/*
+    Logical comparison, typically supported by boolean types.
+    All both of them are "lazy evaluated". Meaning it's only checked (and executed)
+    what is neccessary. See the operators itself for more information what this means.
+*/
+a || b  // 'or'. true when one or the other is true. is also true when both of them are true.
+        // lazy evaluation: if a is true, b isn't checked.
+
+a && b  // 'and'. true when both inputs are true.
+        // lazy evaluation: if a is false, b isn't checked.
+
+/*
+    Bitwise operation <2>. Typically supported by numeric types
+*/
+a << b  // shifts the value of 'a' by 'b' bits to the left
+a >> b  // shifts the value of 'a' by 'b' bits to the right
+
+/*
+    Bitwise - logical operations <2>. Typicalls supported by both numeric and boolean types.
+*/
+a & b   // bitwise and. also works like a non-lazy-evaluated 'and'
+
+a | b   // bitwise or. also works like a non-lazy-evaluated 'or'
+
+a ^ b   // bitwise xor. true when one of the both inputs are true, false otherwise.
+        // also means this is by definition not lazy-evaluated.
+----
+<1> operator overwriting / overloading
+<2> how bitwise operation works
+
+A few of the comparison operators can also be combined with the assignment operator like the arithmetic operators:
+
+[source,lapyst]
+----
+a ||= b; <1>
+a &&= b; <2>
+
+a <<= b; <3>
+a >>= b; <4>
+----
+<1> This is the short-form of `a = a || b;`, which sets `a` to `b` if `a` is not truthy.
+<2> This is the short-form of `a = a && b;`, which sets `a` to `b` if `a` is truthy.
+<3> equivalent to `a = a << b;`
+<4> equivalent to `a = a >> b;`
+
+== Expressions
+
+Expressions should be easy when you know math. Its simply a term or a chain of literals, variables, operators and functions:
+
+[source,lapyst]
+----
+(12 + 2)
+(21 - b)
+(z * getNumber())
+----
+
+You migth notice the parenteses: they are used to "group" expressions together, which can be come handy if you need to change the presedence of operators.
+
+The presedence of operators is the order in which they are executed, you might know this from math: Multiplication and division are calculated before addition and subtraction. Even in a expression like this: `1 + 2 * 3` (the correct result is 7 by the way). If we now want to have the addition be calculated first we need to use parenteses: `(1 + 2) * 3`, and now the result is 9!

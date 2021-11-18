@@ -1,0 +1,106 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Branching
+
+toc::[]
+
+== if-elsif-else
+
+The standard way of branching: "check if something is true and do one thing, if it's false do another". Lets look at an example to understand it better:
+
+[source,lapyst]
+----
+var bool a;
+
+# ...
+# ... some code that changes a
+# ...
+
+if (a) then
+    printf("hello ");
+end
+printf("world");
+----
+
+The code above creates an `if` statement that checks if `a` is true, and executes the block of code between `then` and `end` if it is. Otherwise it just resumes the code after the `end`.
+
+NOTE: we have an `end` keyword here to, but dosnt we use it to tell lapyst where the end of an function is? Well yes, but actually no. You see, `end` truly only tells the end of an block of code. The beginning can be intruduced by multiple different statements. Its also important to know that these "code-blocks" can be nested.
+
+There are multiple versions of if, lets look at them all in one big example:
+
+[source,lapyst]
+----
+if (a) then
+    // this code gets executed when 'a' is true
+elsif (b) then
+    // this code only gets executed when 'a' is not true, and 'b' is
+elsif (c) then
+    // as we see we can repeat elsif many times as we like...
+    // just make sure they dont accidently check whats already been checked
+else
+    // this code is only executed when no other branch above was executed
+end
+
+if (a) printf("hello"); <1>
+
+if (a) <2>
+    printf("hello");
+
+printf("world") if (b); <3>
+----
+<1> this is an prefix-if; it's works like an if but it cannot have elsif or else branches. It also can only have one line of code in its "block": all code until the next simecolon.
+<2> this is also an prefix-if but the code for the "block" is in the next line.
+<3> this is an so called postfix-if: the code before it gets executed only when the check of the if succeeds. This type of if also dosnt allow any elsif or else branches.
+
+=== unless
+
+The `unless` keyword works like an if, but reversed. It dosnt check for an true value but rather after an false value.
+
+It supports nearly all forms that an if also supports; only an 'elsif' equivavelt hasnt been found yet.
+
+// TODO: find elsif equivavelt for unless
+
+== ternary operator
+
+The ternary opeator is less an operator than an statement: it is an very short form of an if-else statement. It also allows to return an value for an use in an expression or assignment, without needing to use `return`:
+
+[source,lapyst]
+----
+msg = doomed ? "so long and thanks for all the fish" : "nice day";
+----
+
+The code above will put the string `"so long and thanks for all the fish"` into the variable `msg` if the other variable `doomed` is true; ans `"nice day"` otherwise.
+
+== Switch
+
+Sometimes you need to write really, and I mean REALLY many elsif cases. That's a tedious process and I personally don't recommend it. But we have a cure for that: the switch statement.
+
+[source,lapyst]
+----
+var string fruit;
+# ...
+
+switch fruit do <1>
+case "apple": <2>
+    shoot_with_arrow(User.TELL_WILLHELM);
+    break; <3>
+case "pear":
+    fruit_compareWith(Fruit.Apple);
+    break;
+case "banana":
+    myself_ask("why is the banana crooked?");
+    break;
+default: <4>
+    kernel_panic("we just got a meltdown. or something similar.");
+end
+----
+<1> This is the header, it declares that we want to inspect the value of `fruit`
+
+<2> This is an case, it declares what value should trigger the execution of the code after the colon (`:`). Code is then executed onward. It will not stop when it's encounter an next `case`, but rather will "fall-through" and execute it's code as well and so on. For a "stop" of execution you'll need to use `break`.
+
+<3> The `break` statement, it stops the execution and resumes the code after the `end` of the switch statement.
+
+<4> With `default:` we can make an "default" branch which code gets executed if no other case above has matched. Think of it like the 'else' in an 'if'.

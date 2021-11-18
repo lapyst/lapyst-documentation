@@ -1,0 +1,147 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Error Handling
+
+toc::[]
+
+In lapyst we have an whole language feature that is dedicated to handle errors. It's principle is based on so called 'Exceptions'. That are objects that can be "thrown" and "catch"-ed. But what do we mean with this?
+
+== Try-catch / throw
+
+Every function call build up an so called "call-stack":
+
+[source,lapyst]
+----
+def myFunc1()
+    printf("Hello world!"); <1>
+end
+
+def myFunc2()
+    myFunc1();
+end
+
+def myFunc3()
+    myFunc2();
+end
+
+myFunc3();
+----
+<1> When we reach this line, the call stacks looks a little like this: `[myFunc1, myFunc2, myFunc3]`, with the most left element beeing the most last called function.
+
+If we now have an error in `myFunc1()`, we _could_ return an value that indicates failure or success and check it, but that means if we want to return something we need to carefully order out returntypes, as well as always wrap code with an `if`:
+
+[source,lapyst]
+----
+def (int, Exception) myDiv(int a, int b)
+    if (b == 0) then
+        return 0, new RuntimeException("Division throug zero!");
+    else
+        return (a / b), nil;
+    end
+end
+
+def (string, Exception) calculateDiv(int a, int b)
+    int result, err = myDiv(a, b);
+    if (err != nil) then
+        return nil, err;
+    else
+        return "${a} / ${b} = ${result}", nil;
+    end
+end
+
+def (bool) calcAndPrint(int a, int b)
+    int text, err = calculateDiv(a, b);
+    if (err != nil) then
+        printf("Error: ${err.message}");
+        return true;
+    else
+        printf("Calculated:\n");
+        printf("  ${text}\n");
+        return false;
+    end
+end
+----
+
+This is actually how go-lang handles errors, but it's a bit tedious to write all this if's.
+
+This is why lapyst supports exceptions: they allow us in case of an error to go back the callstack until we find an function that is willing to handle our error:
+
+[source,lapyst]
+----
+def (int) myDiv(int a, int b)
+    if (b == 0) then
+        throw new RuntimeException("Division throug zero!");
+    else
+        return (a / b);
+    end
+end
+
+def (string) calculateDiv(int a, int b)
+    int result = myDiv(a, b);
+    return "${a} / ${b} = ${result}", false;
+end
+
+def (bool) calcAndPrint(int a, int b)
+    try
+        int text = calculateDiv(a, b);
+        printf("Calculated:\n");
+        printf("  ${text}\n");
+        return false;
+    catch (e => RuntimeException) <1>
+        printf("Error: ${e.message}");
+        return true;
+    end
+end
+----
+<1> This line expresses what the `catch`-block wants to acctually catch: here its any object that has `RuntimeException` in it's ancestors. You also can define multiple `catch`-blocks in an try-catch statement.
+
+A lot cleaner isn't it? This also better expresses how "willing" a function is to respond to errors: `calculateDiv` for example just wants to return a string, itself dosn't "want" to handle errors.
+
+== retry
+
+Wouldn't it be handy to have the ability to retry the `try`-block from a `catch`-block? Actually we can do this with the `retry` keyword:
+
+[source,lapyst]
+----
+var string text = nil;
+try
+    if (text == nil) then
+        throw new RuntimeException("Need at least an empty string");
+    end
+    // ...
+catch (e => RuntimeException) then
+    if (text == nil) then
+        text = "";
+        retry;
+    end
+end
+----
+
+The code above is simple, we try some critical code that throws an exception if the `text` is not at least an empty string, aka the variable is `nil`. We catch this exception, look if `text` is `nil` (to make sure we catched the right exception; we also could check the message of the exception here), and if it is, we set `text` to an empty string and retry the `try`-block.
+
+IMPORTANT: You should always make sure when you using `retry` that you "repair" the try-block or have any other sort of check in place to make sure you are not creating an infinite loop.
+
+== Ensure
+
+Sometimes you want to execute code thats executed regardless what if we succeeded or an error was catched. Thats what the `ensure` block does: it ensures that the code inside the block is called when leaving the try-catch statement:
+
+[source,lapyst]
+----
+def myFunc(int a)
+    try
+        if (a % 2 == 0) then
+            throw new RuntimeException("Error");
+        end
+        printf("All okay\n");
+    catch (e => RuntimeException)
+        printf("ERROR: ${e.message}\n");
+    ensure
+        printf("Done with try-catch...\n");
+    end
+end
+----
+
+IMPORTANT: the ensure block is also called when we call `return`, `break`, `next` or `redo` in the `try`-block or one of the `catch`-blocks. In short: it is ALWAYS ensured that the code is executed. Only when using `retry` in a `catch`-block, the `ensure`-block is *NOT* executed.

@@ -1,0 +1,164 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Procedures/Functions
+
+toc::[]
+
+In lapyst procedures and functions are the same thing.
+To define a function we write:
+
+[source,lapyst]
+----
+def myFunc() <1>
+    // ...
+end
+----
+
+This defines the function `myFunc`. Its "body" is the code until the `end` keyword.
+A body of a function is the code it holds. This is also the code that gets executed when we call / execute this function.
+
+Let's write a simple example:
+
+[source,lapyst]
+----
+def hello()
+    printf("Hello, world!");
+end
+----
+
+This function calls, when executed, the function `printf` which is a function that prints out text to the screen. But when we run the code above, nothing is get printed! This is because we dont call our own function! So lets fix that:
+
+[source,lapyst]
+----
+def hello()
+    printf("Hello, world!");
+end
+
+hello();
+----
+
+When we now run this code, we should see the text 'Hello, world!' on the screen.
+
+== Parameters / Arguments
+
+Our first function is a bit boring, it dosnt do much than to group our code.
+This can be changes with parameters! They allow a function to take arguments that can change the behaviour of the function. We've already used them: the `printf` function has arguments too: the string `"Hello, world!"`.
+
+NOTE: Like variables can parameters also be typed or type-less.
+
+[source,lapyst]
+----
+def good_morning(string name)
+    printf("Good morning ${name}!"); <1>
+end
+----
+<1> we use string interpolation here to insert the value of the `name` variable into our string
+
+With this function we can now call `good_morning("Mai");` to get the text `Good morning Mai!` onto our screen! Sweet! But the truly great is we are not limited to only the string `"Mai"`. We can use any other string you like, thats the power of parameters.
+
+== Return values
+
+We now know how to write functions that group code and how we parameterize them so we can control the code it contains. But wouldn't be greate to also get something back from them? This is possible with return values!
+
+Basically every function can return one (or more) values. As with all type related things in lapyst we can also decide to type it or not!
+
+First the typed example:
+
+[source,lapyst]
+----
+def (int) add(int a, int b)
+    return a + b;
+end
+
+var int r = add(2, 4);
+----
+
+Lets explain the code above: we define here the function `add` which has two parameters as input: `a` and `b`, both of type `int`. We also return an `int` here; thats the `int` in paratheses right after the `def` keyword.
+
+Theres also a new keyword: `return`. It is the keyword what actually lets us set the result, in our case this is the result of the expression `a + b`. Return also ends the execution of the function, meaning any code after it dosnt get executed.
+
+To access the result we use the function like we would use any other expression, in the example above we use the function-call in an assignment for the variable `r`.
+
+But this dosnt stop there; lapyst allows multiple return types:
+
+[source,lapyst]
+----
+def (int,int,int,int) arithmetic(int a, int b)
+    return (a + b), (a - b), (a * b), (a / b);
+end
+
+a,b,c,d = arithmetic(2, 4);
+----
+
+This function returns not one, not two but FOUR values! To retrieve the distrinct values, we need once again an assigment, but this time the left side are multiple variables, seperated by commas.
+
+When there are less recievers than the function returns, the last reciever will set to an array of the remaining values (if possible). If not, the remaining values are discarded.
+
+== Variable arguments
+
+Lets take a closer look to how printf can be used:
+
+[source,lapyst]
+----
+var string name;
+printf("Good morning %s", name);
+----
+
+The function actually itself allows formatting, meaning there are a special "syntax" you need to encode in your string in order for the function to then replace these with data you provide.
+
+In the example above, the `%s` is the format for the first argument to be a string. Lucky for us `name` is one!
+
+NOTE: This example has the same result as string interpolation but with one major difference, we now can store the format somewhere different where we have no access to the variable; we also can make the whole thing dynamic by allowing the format string to switch. This would allow mulitlingual output and much more!
+
+But how does this function work? Lets start by looking at its declaration:
+
+[source,lapyst]
+----
+dec printf(string format, ...);
+----
+
+The first parameter is an string, that makes sense, its the format we use. But after that are three dots `...` whats that? - Thats what we call variable arguments, or varargs for short.
+
+They allow us to tell lapyst that the function allows any number of arguments after arguments before it. Important is that an vararg can only stand last in the list of parameters, and it can only exists one of them.
+
+To access them we need to use a kind of workaround: lapyst only supports full access to the whole list of arguments given, not just the varargs. Thats what the `argument` keyword is for:
+
+[source,lapyst]
+----
+def sum(int n, ...)
+    printf(arguments)   // would print "[3, 5, 6, 7]"
+end
+
+sum(3, 5, 6, 7)
+----
+
+The `argument` keywords acts like an array; thus all operations of an array are supported.
+
+== Overloading
+
+Overloading describes the ability to define multiple functs that are named the same, but they differ in their function signature. A function signature is the combination of all what a function defines to the outside world: the name, the parameters, and in lapyst: the returntypes
+
+[source,lapyst]
+----
+def combine(int a, int b)
+    return (a + b);
+end
+
+def combine(string a, string b)
+    return "${a} ${b}";
+end
+----
+
+As seen above, we define two times the function `combine`, but since their parameters differ, they dont overlap and thus dosn't create an error. To call them we need to be sure to plug the right parameters in:
+
+[source,lapyst]
+----
+combine(1, 2);  // will call combine(int a, int b)
+
+combine("hello", "world");  // will call combine(string a, string b)
+----
+
+This might be hard to distingisch when using type-less variables, because then it's based on what the variable actually holds.

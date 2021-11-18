@@ -1,0 +1,107 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Generics
+
+toc::[]
+
+Sometimes it would be handy to have parameters on the template itself wouldn't it? Thats what generics are for!
+
+== Generic type parameters
+
+Lets consider this example:
+
+[source,lapyst]
+----
+template MyContainer of [ T ] <1>
+    var T content;
+end
+----
+<1> the `of` keyword must come before the `use` keyword.
+
+With the help of the `of` keyword we can express the generics for an template. In the example above we define one named `T`.
+
+This is an generic type that matches any type known to lapyst. With this the second line is possible: we define an field `content` of type `T`. But `T` itself is no real builtin class or template! Instead it refers here to the generic type `T`. 
+
+Now lets instanciate the template:
+
+[source,lapyst]
+----
+var MyContainer c = new MyContainer[int]();
+----
+
+As you see a new pair of brackets apeared: the square ones. They are for the generic parameters: for the generic type `T` we set the builtin type `int`. What we now create is an instance of `MyContainer` that has a field `content` of type `int`.
+
+And thats where really the power of generics lay: with them we can make types we use in an template variable, at least for the instaciation.
+
+But we can go one step further: we can define that only types with an certain parent should be valid:
+
+[source,lapyst]
+----
+template Fruit
+end
+
+template FruitBasket of [ T => Fruit ] <1>
+    var T content;
+end
+----
+<1> The `=&gt;` here declares that the generic type parameter `T` should have somewhare in it's parents the template `Fruit`.
+
+NOTE: This type-check always looks through the complete chain of anchestors of an type and looks if it finds there the type we declared, in our case `Fruit`.
+
+Now let us use our `FruitBasket`:
+
+[source,lapyst]
+----
+template Apple use [Fruit]
+end
+
+template SpecialApple use [Apple]
+end
+
+template Carrot
+end
+
+// This is ok since 'Fruit' itself is an 'Fruit'
+var FruitBasket fbasket = new FruitBasket[Fruit]();
+
+// This one works too, since the parent of 'Apple' is 'Fruit'
+var FruitBasket abasket = new FruitBasket[Apple]();
+
+// Also works, since 'SpecialApple' has the parent 'Apple',
+// wich then has the parent 'Fruit'
+var FruitBasket sabasket = new FruitBasket[SpecialApple]();
+
+// This will throw an error, because `Carrot` dosn't have
+// `Fruit` in their anchestors
+var FruitBasket cbasket = new FruitBasket[Carrot]();
+----
+
+== Generic value parameters
+
+Theres actually a second type of generic parameters we can use: values. They are essentially constants that are bound to the type of an instance.
+
+Let's expand our `FruitBasket` template from before to contain an maximum of fruits it can contain
+
+[source,lapyst]
+----
+template FruitBasket of [ T => Fruit , int maxSize ]
+    var T content;
+
+    def (int) getMaxSize()
+        return maxSize; <1>
+    end
+end
+----
+<1> You can use this the same way as every other constant.
+
+To write an generic value parameter, we must simply write it like an constant but without the 'const' keyword. If you want an type-free generic value parameter, you then once again NEED the `const` keyword:
+
+[source,lapyst]
+----
+template FruitBasket of [ T => Fruit , const maxSize ] <1>
+end
+----
+<1> Now `maxSize` is an type-less generic value parameter.
