@@ -1,0 +1,43 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Constructor
+
+toc::[]
+
+The constructor is an special method: it get's called when we instanciate a template.
+
+[source,lapyst]
+----
+template Car
+    var int kmh;
+
+    def Car(int kmh) <1>
+        self.kmh = kmh;
+    end
+end
+
+var Car car1 = new Car(100); <2>
+----
+<1> This is an constructor, it's essentally a method thats named like the template.
+<2> We now need to supply arguments when we instanciate the template.
+
+NOTE: If you don't declare any explicit constructor, lapyst implicit declares an default constructor: it's the one we have called in previous examples. It takes no arguments and is essentially only there to setup some inner workings of the template; but this is also done in all constructors defined by the programmer!
+
+IMPORTANT: If you declare *ANY* constructor the default constructor is no longer created by lapyst, thus forcing you to either specify arguments when instanciating the template or to define a custom constructor without parameters.
+
+== Visibility
+
+Constructors also have an visibility: this time it's not just bound to the template but rather also the file or namespace the template is declared in.
+
+This means effectivly means:
+
+- if an constructor is private, it can also be used in the file it's declared in, but only in the namespace it's declared in. But it can be not used outside the file even when in the same namespace. Only the template itself can call this constructor then.
+
+- if an constructor is protected the same as in private is possible but now its also possible for the same namespace but outside the file that declares the template to use the constructor. The "level" here also refers to the level of namespace that can call the constructor.
+
+- public is still what it is: public
+
+To express the visibility, you simply use the same visibilty syntax as for methods.

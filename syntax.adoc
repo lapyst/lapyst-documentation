@@ -266,6 +266,9 @@ Methods also supports the same parameter and return functionalities we know from
 // self keyword
 include::syntax/templates/self.adoc[leveloffset=+2]
 
+// constructor
+include::syntax/templates/constructor.adoc[leveloffset=+2]
+
 === Inheritance
 
 Templates are all cool but what if we have two templates, say `Cat` and `Dog` which have many things in common? It would be a bit tedious to write them both from scratch isn't it? Lucky for us that we have inheritance! It allows us to declare a "parent" template for each template which then inherit all fields and methods of the parent:
