@@ -54,6 +54,29 @@ template Car use [Driveable]
 end
 ----
 
+A alternative way to call a parents method is by just using the `super` keyword like an method. It's also the only way you can call the parent constructor inside the constructor.
+
+[source,lapyst]
+----
+template Driveable
+    var int wheels;
+
+    def !Driveable(int wheels)
+        self.wheels = wheels;
+    end
+end
+
+template Car use [Driveable]
+    var int seats;
+
+    def !Car(int wheels, int seats)
+        self.seats = seats;
+        super(wheels); <1>
+    end
+end
+----
+<1> This line calls the constructor of `Driveable`. Note how it can be used even after other code.
+
 == The deadly diamond
 
 Lets consider the following example:
@@ -103,3 +126,5 @@ end
 <1> Notice that this super has the parent's template name in brackets, this tells lapyst that we want to call a method from an specific parent, here `B`.
 
 NOTE: The `super` keyword not only supports to specify the parent you want to use, but also a way to specify ALL parents: `super[*].display()`. This only works for method calls and field assignments, but NOT on reading fields.
+
+NOTE: The bracket syntax also works when using super as an method: `super[B]()` or `super[*]()`.
