@@ -22,7 +22,13 @@ Lets first look at how to write the annotation itself:
 <1> The annotation `some_annotation`, without parameters
 <2> The annotation `some_annotation`, this time with parameters: We set the parameter `number` to the number `12`.
 
+== Placement
+
 Annotation itself can be placed at many places:
+
+=== Above declarations
+
+Annotations can places above everything that declares something:
 
 [source,lapyst]
 ----
@@ -50,9 +56,6 @@ namespace Test
     )
     end
 
-    def (@return_annotation int) myOtherFunction()
-    end
-
 end
 
 @function_annotation
@@ -63,3 +66,36 @@ def someFunction()
 
 end
 ----
+
+=== Type annotation
+
+Types also can be annotated with extra data:
+
+[source,lapyst]
+----
+var Car car = new @type_annotation Car();
+
+var @type_annotation int i;
+
+var array[@type_annotation int] a;
+
+template MyContainer
+    of [ @type_annotation T , @type_annotation int i, @type_annotation const j ]
+    use [ @type_annotation Parent ]
+
+    var @type_annotation int field;
+
+    def (@type_annotation int, @type_annotation int) myFunction()
+    end
+
+end
+
+// type annoation for typeless
+var @type_annotation c;
+
+c = new MyContainer[ @type_annotation int, 12, 1 ]();
+----
+
+== Declaration
+
+IMPORTANT: Work in Progress

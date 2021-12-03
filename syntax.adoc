@@ -396,3 +396,6 @@ include::syntax/templates/generics.adoc[leveloffset=+2]
 
 // Roles
 include::syntax/roles.adoc[leveloffset=+1]
+
+// Annotations
+include::syntax/annotations.adoc[leveloffset=+1]
