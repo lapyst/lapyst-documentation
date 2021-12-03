@@ -1,0 +1,101 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Macros
+
+toc::[]
+
+Macros are one of several kind of meta-programming features in lapyst. They enable you to dynamically "write" code.
+
+== Declaration
+
+To declare a macro we use a similar structure like a function, but instead of the `def` keyword, we use the `macro` keyword.
+
+[source,lapyst]
+----
+macro my_macro() <1>
+end
+----
+
+Macros also can take parameters and return data. We can simply use the same syntax here as in a function.
+
+IMPORTANT: Macros can only use builtin types (`int`, `bool`, `string` etc.) or some special macro-only datatypes. More on that later.
+
+== Template syntax
+
+To let your macro actually "generate" code, we use templating.
+
+The templating syntax of an macro is hevily inspired by mustace: To "embedd" an variable's value into the output, you sorround the variable with curly brackets:
+
+[source]
+----
+{{my_variable}}
+----
+
+A template inside a macro itself must be either begin with an `$` and then runs until the line ends, or be quoted with `!!`:
+
+[source,lapyst]
+----
+macro define_method(name)
+    $ def {{name}} end
+end
+
+macro make_method(name, value)
+    !!
+        def {{name}}
+            return {{value}}
+        end
+    !!
+end
+----
+
+IMPORTANT: A template block (`!!`) or line (`$`) must have nothing before oder after it on its start/end line. This means you cannot use them in ANY expression.
+
+NOTE: you can perfectly fine declare a macro inside an macro. The only restriction here is that multiline templates does NOT simply work cascading (Single-line one does). For a multiline template inside a multiline template, you must add another pair of `!!` around the inner multiline template.
+
+== The `@macro_context` annotation
+
+This annotation can give your macro extra information where the macro itself can be used. For example you could write an macro that is only available inside an template:
+
+[source,lapyst]
+----
+@macro_context{ in=[ :template ] }
+macro attr_reader(Symbol name)
+    type = context.getField(name).getType();
+    !!
+        def ({{type}}) !{{name}}
+            return self.{{name}}
+        end
+    !!
+end
+----
+
+It's only has the attribute `in` which accepts an array of symbols.
+
+These symbols can be:
+[source,lapyst]
+----
+:template
+:function
+:method
+:namespace
+:global
+:constructor
+----
+
+== The special variable `context`
+
+In each macro, the `context` variable holds the context in which the macro is currently being evaluated.
+With this, you have read access to all definitions / declarations in this context until the point of the macro call.
+
+For example: 
+[source,lapyst]
+----
+@macro_context{ in=[ :template ] }
+macro attr_reader(Symbol name)
+    type = context.getField(name).getType(); <1>
+end
+----
+<1> This line querys the current context (a template) for an specific field. From this field it then retrieves the type of that field.

@@ -399,3 +399,6 @@ include::syntax/roles.adoc[leveloffset=+1]
 
 // Annotations
 include::syntax/annotations.adoc[leveloffset=+1]
+
+// Macros
+include::syntax/macros.adoc[leveloffset+=1]
