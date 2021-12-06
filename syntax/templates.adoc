@@ -92,6 +92,29 @@ a.make_noise(); <1>
 
 Methods also supports the same parameter and return functionalities we know from functions.
 
+=== Static methods
+
+A problem with methods is we cannot use them without an instance of the template. But fear not: theres an solution to this problem: static methods! Static methods are essentially methods (or functions) that you can call without an instance of the template.
+
+To make an method static, you use the `static` keyword after the `def` keyword:
+
+[source,lapyst]
+----
+template Car
+    def (int) !getWheels()
+        return 4;
+    end
+
+    def static (bool) !canHaveWheels()
+        return true;
+    end
+end
+
+Car.getWheels();        # this fails
+
+Car.canHaveWheels();    # this works
+----
+
 // self keyword
 include::templates/self.adoc[leveloffset=+1]
 
@@ -220,5 +243,8 @@ end
 
 As shown above, the level is counted from the template that define the protection onwards.
 
+// Super-keyword
 include::templates/super.adoc[leveloffset=+1]
+
+// Generics
 include::templates/generics.adoc[leveloffset=+1]
