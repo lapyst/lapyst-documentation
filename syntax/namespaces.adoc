@@ -1,0 +1,30 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toclevels: 3
+:toc-placement!:
+
+= Namespaces
+
+toc::[]
+
+In Lapyst, you can group code by using namespaces. This allows you to tidy up your code some more.
+
+[source,lapyst]
+----
+namespace MyCode
+    def my_method()
+        printf("Hello world!\n");
+    end
+
+    template Test
+    end
+end
+
+MyCode::my_method(); <1>
+
+var t = new MyCode::Test(); <1>
+----
+<1> When refering to names inside an namespace, we must prefix this name with the name of the namespace and seperate (or join) the both names using a double colon (`::`).
+
+IMPORTANT: A namespace is NOT a type and cannot be instanciated. You also dont need to use the `static` keyword on any function in an namespace like you would in an template.

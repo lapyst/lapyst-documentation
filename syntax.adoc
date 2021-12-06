@@ -179,6 +179,9 @@ include::syntax/error_handling.adoc[leveloffset=+1]
 // Templates
 include::syntax/templates.adoc[leveloffset=+1]
 
+// Namespaces
+include::syntax/namespaces.adoc[leveloffset=+1]
+
 // Roles
 include::syntax/roles.adoc[leveloffset=+1]
 
