@@ -1,0 +1,103 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toclevels: 3
+:toc-placement!:
+
+= Im/Exporting
+
+toc::[]
+
+== The `import` keyword
+
+To interact with multiple files, we need a way of interacting with these other files.
+In order to make stuff in a lapyst file available that is written in another file, one must use the `import` keyword:
+
+.File: hello.lp
+[source,lapyst]
+----
+def say_hello()
+    printf("Hello world!");
+end
+----
+
+.File: test.lp
+[source,lapyst]
+----
+import "test.lp";
+
+say_hello();
+----
+
+=== the `as` modifier
+
+Sometimes you come across a problem where you cannot simply import a file, due to name-clashings.
+
+When you import a file that declares an identifier but declare it also inside the file that imports, you get an name-clash:
+
+.File hello.lp
+[source,lapyst]
+----
+def say_hello()
+    printf("Hello world!");
+end
+----
+
+.File: test.lp
+[source,lapyst]
+----
+def say_hello()
+    printf("Hello!");
+end
+
+import "hello.lp";
+
+say_hello(); <1>
+----
+<1> This line dosnt know which `say_hello` you are refering to.
+
+Because of this problem, lapyst will produce an compile error.
+To avoid this, you can import into a namespace rather than global space:
+
+.File: test_fixed.lp
+[source,lapyt]
+----
+def say_hello()
+    printf("Hello!");
+end
+
+import "hello.lp" as libHello;
+
+say_hello();            # Refers to this file's say_hello
+
+libHello::say_hello();  # Refers to hello.lp's say_hello
+----
+
+IMPORTANT: if the namespace (in our case `libHello`) would exists beforehand, lapyst would import the new symbols *into* this namespace. This can create the same name-clash problem as before.
+
+IMPORTANT: Name-clashing for functions only occure when they have the same signature. If not, lapyst treads the functions as overloads to each other!
+
+=== the `use` modifier
+
+Lapyst also supports importing only certain elements of an file:
+
+.File: hello_v2.lp
+[source,lapyst]
+----
+def say_hello()
+    printf("Hello!");
+end
+
+def say_goodbye()
+    printf("Goodbye...");
+end
+----
+
+.File: test.lp
+[source,lapyst]
+----
+import "./test.lp" use [say_hello];
+
+say_hello();
+say_goodbye();  # Error since we only imported say_hello
+----

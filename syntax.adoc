@@ -182,6 +182,9 @@ include::syntax/templates.adoc[leveloffset=+1]
 // Namespaces
 include::syntax/namespaces.adoc[leveloffset=+1]
 
+// Im/Exporting
+include::syntax/im_export.adoc[leveloffset=+1]
+
 // Roles
 include::syntax/roles.adoc[leveloffset=+1]
 
