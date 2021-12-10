@@ -122,3 +122,18 @@ The various flags for an regex can be expressed rigth after the regex itself.
 ----
 
 For more information about regular expressions read the chapter about it here: Regular Expressions.
+
+== Symbols
+
+Symbols are like identifiers but unlike them, symbols are values, thus allowing us to use them just like numbers or strings!
+
+[source,lapyst]
+----
+:hello_world
+:"hello world"
+----
+
+As seen above, a symbol starts with an colon (`:`) and then continues until it hits the first whitespace or line terminator!
+When you need spaces or a simecolon inside your symbols name, you can just quote the name. This works like the string: the symbol now continues until it hit's a second `"`.
+
+NOTE: Symbols are a very powerfull value type because they are essentially named numbers.

@@ -248,3 +248,70 @@ include::templates/super.adoc[leveloffset=+1]
 
 // Generics
 include::templates/generics.adoc[leveloffset=+1]
+
+== Re-Entry of Templates
+
+Lapyst supports re-entry into all template-contexts like ruby does. But what does "re-entry" (or "re-opening") means?
+It simply means that you can re-open the template after the `end`-keyword that closes the template to add more stuff to it:
+
+[source, lapyst]
+----
+template Animal <1>
+    var int height;
+end <2>
+
+# ... some other code ...
+
+template Animal <3>
+    def (int) !getHeight()
+        return self.height;
+    end
+end
+----
+<1> this "opens" the template `Animal` for the first time, thus declaring it
+<2> this "closes" the template `Animal`
+<3> here we "re-open" the template `Animal`. This does NOT overwrite anything we've done before!
+
+IMPORTANT: inheritance as well as generics can only be defined by the *FIRST* opening of an template. Generics (`as`) or inheritance (`use`) declerations on re-opening's will result in an syntax error.
+
+Re-entry also allows us to "overwrite" previous methods. But this time not only through overloading, but real "overwriting", meaning the original method can completly be replaced with the new one. To save the methods, use the `alias_method` macro:
+
+[source,lapyst]
+----
+template MyList
+    def push(string element)
+        printf("original MyList.push %s", element);
+    end
+end
+
+# ...
+
+template MyList
+    alias_method(:_old_push, :push); <1>
+
+    def push(string element) <2>
+        _old_push(element + ' test');
+        printf("new MyList.push %s", element);
+    end
+end
+
+var l = new MyList();
+l.push('hello world');
+----
+<1> This aliases the method the method body of `push` with a new name: `_old_push`. This does *not* remove the old name!
+<2> Here we associate a new method with the name `push`. This would also be the case without a previous `alias_method`.
+
+Overwriting of an method only works in the context of an re-openend template.
+An second definition of `push` with the same signature like below produces an syntax error:
+[source,lapyst]
+----
+template MyList
+    def push(string element)
+        # ...
+    end
+
+    def push(string element)    # this line will trigger the syntax error
+        # ...
+    end
+end
+----
