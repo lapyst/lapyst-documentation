@@ -101,3 +101,27 @@ import "./test.lp" use [say_hello];
 say_hello();
 say_goodbye();  # Error since we only imported say_hello
 ----
+
+== The `export` keyword
+
+Per default, no imported declarations will be present when you import a file. To change this you can use the `export` keyword to export declarations:
+
+.File: hello.lp
+[source,lapyst]
+----
+def say_hello()
+    printf("Hello!");
+end
+----
+
+.File: export.lp
+[source,lapyst]
+----
+import "hello.lp"
+
+export [ say_hello ]; <1>
+
+export [ say_hello ] as libHello; <2>
+----
+<1> This exports `say_hello` as global
+<2> This wraps `say_hello` into the namespace `libHello` before exporting it
