@@ -57,11 +57,11 @@ NOTE: you can perfectly fine declare a macro inside an macro. The only restricti
 
 == The `@macro_context` annotation
 
-This annotation can give your macro extra information where the macro itself can be used. For example you could write an macro that is only available inside an template:
+This annotation can give your macro extra information where the macro itself can be used. For example you could write an macro that is only available inside an shape:
 
 [source,lapyst]
 ----
-@macro_context{ in=[ :template ] }
+@macro_context{ in=[ :shape ] }
 macro attr_reader(Symbol name)
     type = context.getField(name).getType();
     !!
@@ -77,7 +77,7 @@ It's only has the attribute `in` which accepts an array of symbols.
 These symbols can be:
 [source,lapyst]
 ----
-:template
+:shape
 :function
 :method
 :namespace
@@ -93,9 +93,9 @@ With this, you have read access to all definitions / declarations in this contex
 For example: 
 [source,lapyst]
 ----
-@macro_context{ in=[ :template ] }
+@macro_context{ in=[ :shape ] }
 macro attr_reader(Symbol name)
     type = context.getField(name).getType(); <1>
 end
 ----
-<1> This line querys the current context (a template) for an specific field. From this field it then retrieves the type of that field.
+<1> This line querys the current context (a shape) for an specific field. From this field it then retrieves the type of that field.

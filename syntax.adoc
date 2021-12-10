@@ -176,8 +176,8 @@ include::syntax/loops.adoc[leveloffset=+1]
 // Error handling
 include::syntax/error_handling.adoc[leveloffset=+1]
 
-// Templates
-include::syntax/templates.adoc[leveloffset=+1]
+// Shapes
+include::syntax/shapes.adoc[leveloffset=+1]
 
 // Namespaces
 include::syntax/namespaces.adoc[leveloffset=+1]

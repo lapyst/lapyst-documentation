@@ -35,8 +35,8 @@ Annotations can places above everything that declares something:
 @namespace_annotation
 namespace Test
 
-    @template_annotation
-    template MyTempl
+    @shape_annotation
+    shape MyTempl
 
         @field_annotation
         var int field;
@@ -79,7 +79,7 @@ var @type_annotation int i;
 
 var array[@type_annotation int] a;
 
-template MyContainer
+shape MyContainer
     of [ @type_annotation T , @type_annotation int i, @type_annotation const j ]
     use [ @type_annotation Parent ]
 

@@ -3,7 +3,7 @@
 :toc:
 :toc-placement!:
 
-= Templates / Classes
+= Shapes (Classes)
 
 toc::[]
 
@@ -11,33 +11,33 @@ Lapyst is a so called Object-Oriented programming language. But what is an objec
 
 Lapyst follows here the "role" or "behavior" pattern, meaning a class dosnt dictate to 100% how a object in lapyst should be build, but rather it defines one part of the object.
 
-Lets look at a simple template:
+Lets look at a simple shape:
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
     // ...
 end
 ----
 
-The `template` keyword starts a new template, it then follows the name of the template which is an identifier and follows the same rule as all identifiers.
+The `shape` keyword starts a new shape, it then follows the name of the shape which is an identifier and follows the same rule as all identifiers.
 
-To instantiate a new instance of this template, we use the `new` keyword:
+To instantiate a new instance of this shape, we use the `new` keyword:
 
 [source,lapyst]
 ----
 var Animal a = new Animal();
 ----
 
-Also notice how the type of the variable is now the name of our template: this means we now typed our variable as an `Animal`, meaning we also get the same type-checks as for builtin types but now also for our custom defined one!
+Also notice how the type of the variable is now the name of our shape: this means we now typed our variable as an `Animal`, meaning we also get the same type-checks as for builtin types but now also for our custom defined one!
 
 == Fields
 
-We now know how to write a template and how we create an instance of it, but we currently dont store anthing in it. Theres where fields come into play: they are like variables but they reside inside a instance of an template, while declared on the template itself:
+We now know how to write a shape and how we create an instance of it, but we currently dont store anthing in it. Theres where fields come into play: they are like variables but they reside inside a instance of an shape, while declared on the shape itself:
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
     var int weight; <1>
 end
 ----
@@ -47,7 +47,7 @@ With this field itself we cannot do much, since fields in lapyst can have an vis
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
     var int !weight; <1>
 end
 ----
@@ -67,12 +67,12 @@ Theres actually a 3rd type of visibility: protected. But for that we first need 
 
 == Methods
 
-Methods a like functions but they are bound to an template / object and operate on them.
-We declare them inside the template like we would normal functions:
+Methods a like functions but they are bound to an shape / object and operate on them.
+We declare them inside the shape like we would normal functions:
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
     
     def make_noise()
         // ...
@@ -88,19 +88,19 @@ When then can simply call them like so:
 var Animal a = new Animal();
 a.make_noise(); <1>
 ----
-<1> This calls the `make_noise` method from the `Animal` template the instance stored in `a`.
+<1> This calls the `make_noise` method from the `Animal` shape the instance stored in `a`.
 
 Methods also supports the same parameter and return functionalities we know from functions.
 
 === Static methods
 
-A problem with methods is we cannot use them without an instance of the template. But fear not: theres an solution to this problem: static methods! Static methods are essentially methods (or functions) that you can call without an instance of the template.
+A problem with methods is we cannot use them without an instance of the shape. But fear not: theres an solution to this problem: static methods! Static methods are essentially methods (or functions) that you can call without an instance of the shape.
 
 To make an method static, you use the `static` keyword after the `def` keyword:
 
 [source,lapyst]
 ----
-template Car
+shape Car
     def (int) !getWheels()
         return 4;
     end
@@ -116,18 +116,18 @@ Car.canHaveWheels();    # this works
 ----
 
 // self keyword
-include::templates/self.adoc[leveloffset=+1]
+include::shapes/self.adoc[leveloffset=+1]
 
 // constructor
-include::templates/constructor.adoc[leveloffset=+1]
+include::shapes/constructor.adoc[leveloffset=+1]
 
 == Inheritance
 
-Templates are all cool but what if we have two templates, say `Cat` and `Dog` which have many things in common? It would be a bit tedious to write them both from scratch isn't it? Lucky for us that we have inheritance! It allows us to declare a "parent" template for each template which then inherit all fields and methods of the parent:
+shapes are all cool but what if we have two shapes, say `Cat` and `Dog` which have many things in common? It would be a bit tedious to write them both from scratch isn't it? Lucky for us that we have inheritance! It allows us to declare a "parent" shape for each shape which then inherit all fields and methods of the parent:
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
 
     var int weight;
 
@@ -137,11 +137,11 @@ template Animal
 
 end
 
-template Dog use [Animal]
+shape Dog use [Animal]
     // ...
 end
 
-template Cat use [Animal]
+shape Cat use [Animal]
     // ...
 end
 
@@ -150,24 +150,24 @@ cat.weight = 11;
 cat.make_noise();
 ----
 
-Use see, with `use` we can declare the parent(s) of an template. Why plural you may ask? Because lapyst supports multi-inheritance:
+Use see, with `use` we can declare the parent(s) of an shape. Why plural you may ask? Because lapyst supports multi-inheritance:
 
 [source,lapyst]
 ----
-template Mammal
+shape Mammal
     // ...
 end
 
-template Fish
+shape Fish
     // ...
 end
 
-template Dolphin use [Mammal, Fish]
+shape Dolphin use [Mammal, Fish]
     // ...
 end
 ----
 
-This makes it possible for the `Dolphin` template to inherit fields and methods from both `Mammal` and `Fish`.
+This makes it possible for the `Dolphin` shape to inherit fields and methods from both `Mammal` and `Fish`.
 
 == Protected fields
 
@@ -175,12 +175,12 @@ As we quickly note when we talked about fields, there is a third level of visibi
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
     var int weight;
     var int !height;
 end
 
-template Cat use [Animal]
+shape Cat use [Animal]
 
     def show_fields()
         // this works, since 'height' is public
@@ -194,17 +194,17 @@ template Cat use [Animal]
 end
 ----
 
-As we see, we have a bit of a problem here: private fields are only visible inside the template they are declared on, but public fields are not only accessible by templates that inherit from its parent but also for the complete outside world.
+As we see, we have a bit of a problem here: private fields are only visible inside the shape they are declared on, but public fields are not only accessible by shapes that inherit from its parent but also for the complete outside world.
 
 Then it's time for protected fields:
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
     var int *weight;
 end
 
-template Cat use [Animal]
+shape Cat use [Animal]
 
     def show_fields()
         printf("weight: %d", self.weight);
@@ -220,16 +220,16 @@ In each other language that would be it, but lapyst takes the whole thing a step
 
 [source,lapyst]
 ----
-template Animal
+shape Animal
     var int *weight;
     var int **height; <1>
 end
 
-template Cat use [Animal]
+shape Cat use [Animal]
     // ...
 end
 
-template Tiger use [Cat]
+shape Tiger use [Cat]
     def show_fields()
         // dosnt work since the `weight` field is only visible for one level
         printf("weight: %d", self.weight);
@@ -241,44 +241,44 @@ end
 ----
 <1> Notice how theres no whitespace between the `&#42;` itself and also between the `&#42;` and the name.
 
-As shown above, the level is counted from the template that define the protection onwards.
+As shown above, the level is counted from the shape that define the protection onwards.
 
 // Super-keyword
-include::templates/super.adoc[leveloffset=+1]
+include::shapes/super.adoc[leveloffset=+1]
 
 // Generics
-include::templates/generics.adoc[leveloffset=+1]
+include::shapes/generics.adoc[leveloffset=+1]
 
-== Re-Entry of Templates
+== Re-Entry of shapes
 
-Lapyst supports re-entry into all template-contexts like ruby does. But what does "re-entry" (or "re-opening") means?
-It simply means that you can re-open the template after the `end`-keyword that closes the template to add more stuff to it:
+Lapyst supports re-entry into all shape-contexts like ruby does. But what does "re-entry" (or "re-opening") means?
+It simply means that you can re-open the shape after the `end`-keyword that closes the shape to add more stuff to it:
 
 [source, lapyst]
 ----
-template Animal <1>
+shape Animal <1>
     var int height;
 end <2>
 
 # ... some other code ...
 
-template Animal <3>
+shape Animal <3>
     def (int) !getHeight()
         return self.height;
     end
 end
 ----
-<1> this "opens" the template `Animal` for the first time, thus declaring it
-<2> this "closes" the template `Animal`
-<3> here we "re-open" the template `Animal`. This does NOT overwrite anything we've done before!
+<1> this "opens" the shape `Animal` for the first time, thus declaring it
+<2> this "closes" the shape `Animal`
+<3> here we "re-open" the shape `Animal`. This does NOT overwrite anything we've done before!
 
-IMPORTANT: inheritance as well as generics can only be defined by the *FIRST* opening of an template. Generics (`as`) or inheritance (`use`) declerations on re-opening's will result in an syntax error.
+IMPORTANT: inheritance as well as generics can only be defined by the *FIRST* opening of an shape. Generics (`as`) or inheritance (`use`) declerations on re-opening's will result in an syntax error.
 
 Re-entry also allows us to "overwrite" previous methods. But this time not only through overloading, but real "overwriting", meaning the original method can completly be replaced with the new one. To save the methods, use the `alias_method` macro:
 
 [source,lapyst]
 ----
-template MyList
+shape MyList
     def push(string element)
         printf("original MyList.push %s", element);
     end
@@ -286,7 +286,7 @@ end
 
 # ...
 
-template MyList
+shape MyList
     alias_method(:_old_push, :push); <1>
 
     def push(string element) <2>
@@ -301,11 +301,11 @@ l.push('hello world');
 <1> This aliases the method the method body of `push` with a new name: `_old_push`. This does *not* remove the old name!
 <2> Here we associate a new method with the name `push`. This would also be the case without a previous `alias_method`.
 
-Overwriting of an method only works in the context of an re-openend template.
+Overwriting of an method only works in the context of an re-openend shape.
 An second definition of `push` with the same signature like below produces an syntax error:
 [source,lapyst]
 ----
-template MyList
+shape MyList
     def push(string element)
         # ...
     end
