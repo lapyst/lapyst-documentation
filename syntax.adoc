@@ -188,6 +188,9 @@ include::syntax/im_export.adoc[leveloffset=+1]
 // Roles
 include::syntax/roles.adoc[leveloffset=+1]
 
+// Modules
+include::syntax/modules.adoc[leveloffset=+1]
+
 // Enums
 include::syntax/enum.adoc[leveloffset=+1]
 
