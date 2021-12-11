@@ -249,6 +249,9 @@ include::shapes/super.adoc[leveloffset=+1]
 // Generics
 include::shapes/generics.adoc[leveloffset=+1]
 
+// Casting
+include::shapes/casting.adoc[leveloffset=+1]
+
 == Re-Entry of shapes
 
 Lapyst supports re-entry into all shape-contexts like ruby does. But what does "re-entry" (or "re-opening") means?

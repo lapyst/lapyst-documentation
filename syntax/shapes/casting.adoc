@@ -1,0 +1,46 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Casting (Shapes)
+
+toc::[]
+
+Lets consider this example:
+[source,lapyst]
+----
+shape Driveable
+end
+
+shape Car use [Driveable]
+end
+
+def doDrive(Driveable d)
+    # ...
+end
+
+var Car c = new Car();
+doDrive(c);
+----
+
+In the example above we have an shape `Driveable` and a shape `Car` which extends `Driveable`.
+We then have an function `doDrive` that only accepts a parameter of type `Driveable`.
+
+In the last line we call `doDrive` with an `Car`. This line actually has an hidden cast, lapyst injects it for us: a down-cast. This means essenstially that we now "speak" to the instance in `c` like it would be a `Driveable`; this is nothing new per-se because `Driveable` may not have all methods & fields `Car` implements.
+
+But what is now when we somehow *need* the `Car` object back inside our `doDrive` function? We can cast it as well! This time we need to do it explicitly: 
+[source,lapyst]
+----
+def doDrive(Driveable d)
+    # ...
+    Car c = cast d to Car; <1>
+    if (c != nil) then
+        # do something with your car
+    end
+    # ...
+end
+----
+<1> This line does the casting, the result of this expression is either an object of the type you wanted to cast to (in our case `Car`), or `nil` if the cast didn't succeed.
+
+IMPORTANT: You can only cast up or down the ancestor list of the instance; you cannot cast between shapes that have nothing in common with each other. This also means you *cannot* cast between two different children of one parent class. For example: if we add the shape 'Bike' to the example above that also extends `Driveable`, and plug it into our `doDrive` function, the cast to `Car` would also return `nil`.
