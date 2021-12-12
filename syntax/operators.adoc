@@ -81,7 +81,7 @@ a <= b  // checks if a is lower or equal than b
 /*
     Comparisons typically supported by string-like types
 */
-a =~ b  // compares a against an regex. this operator is the only one that dosnt
+a ~~ b  // compares a against an regex. this operator is the only one that dosnt
         // return a boolean, but rather `nil` on failure (which is falsy) and
         // an regex result object on success (which is truthy)
 
