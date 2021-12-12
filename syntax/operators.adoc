@@ -43,6 +43,13 @@ a += 1; <1>
 ----
 <1> this first calculates `a + 1` and then stores the result in `a`. you also could write `a = a + 1` but it's a bit shorter and easier to read.
 
+The subtraction operator (`-`) can also be used as an unary operator:
+[source,lapyst]
+----
+-a; <1>
+----
+<1> mathematically, this is equivalent to `0 - a`
+
 == Comparison
 
 This type of operator compares two things with each other and returns an boolean value as a result. They return `true` when the comparison succeeds, and `false` otherwise. When they return `true` depends on the operator itself.
@@ -89,14 +96,40 @@ a || b  // 'or'. true when one or the other is true. is also true when both of t
 a && b  // 'and'. true when both inputs are true.
         // lazy evaluation: if a is false, b isn't checked.
 
+----
+<1> operator overwriting / overloading
+
+A few of the comparison operators can also be combined with the assignment operator like the arithmetic operators:
+
+[source,lapyst]
+----
+a ||= b; <1>
+a &&= b; <2>
+----
+<1> This is the short-form of `a = a || b;`, which sets `a` to `b` if `a` is not truthy.
+<2> This is the short-form of `a = a && b;`, which sets `a` to `b` if `a` is truthy.
+
+Theres also another operator: the unary not operator:
+[source,lapyst]
+----
+!a; <1>
+----
+<1> This reveres the boolean value of `a`: truthy will become false and falsy become true
+
+== Bitwise operators
+
+Lapyst also supports bitwise operators:
+
+[source,lapyst]
+----
 /*
-    Bitwise operation <2>. Typically supported by numeric types
+    Bitwise operation <1>. Typically supported by numeric types
 */
 a << b  // shifts the value of 'a' by 'b' bits to the left
 a >> b  // shifts the value of 'a' by 'b' bits to the right
 
 /*
-    Bitwise - logical operations <2>. Typicalls supported by both numeric and boolean types.
+    Bitwise - logical operations <1>. Typicalls supported by both numeric and boolean types.
 */
 a & b   // bitwise and. also works like a non-lazy-evaluated 'and'
 
@@ -105,23 +138,32 @@ a | b   // bitwise or. also works like a non-lazy-evaluated 'or'
 a ^ b   // bitwise xor. true when one of the both inputs are true, false otherwise.
         // also means this is by definition not lazy-evaluated.
 ----
-<1> operator overwriting / overloading
-<2> how bitwise operation works
+<1> how bitwise operation works
 
-A few of the comparison operators can also be combined with the assignment operator like the arithmetic operators:
+The bitwise operators above also allows to be combined with an `=` at the end:
 
 [source,lapyst]
 ----
-a ||= b; <1>
-a &&= b; <2>
+a <<= b; <1>
+a >>= b; <2>
 
-a <<= b; <3>
-a >>= b; <4>
+a &= b <3>
+a |= b <4>
+a ^= b <5>
 ----
-<1> This is the short-form of `a = a || b;`, which sets `a` to `b` if `a` is not truthy.
-<2> This is the short-form of `a = a && b;`, which sets `a` to `b` if `a` is truthy.
-<3> equivalent to `a = a << b;`
-<4> equivalent to `a = a >> b;`
+<1> equivalent to `a = a << b;`
+<2> equivalent to `a = a >> b;`
+<3> equivalent to `a = a & b;`
+<3> equivalent to `a = a | b;`
+<3> equivalent to `a = a ^ b;`
+
+The bitwise operator group also has one unary operator: the bitwise not:
+[source,lapyst]
+----
+~a;
+----
+
+This operator flips (or inverts) all bits from its input (here `a`).
 
 == Expressions
 
