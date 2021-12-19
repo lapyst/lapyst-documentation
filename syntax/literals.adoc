@@ -113,12 +113,12 @@ i = nil <2>
 Regexes (or regular expressions) are in lapyst first-class datatypes.
 This means they have their own syntax too: they work a little like strings, but they dont support interpolation. They do howerver support to be multiline.
 
-The various flags for an regex can be expressed rigth after the regex itself.
+The various flags can only be expressed inside the regex itself.
 
 [source,lapyst]
 ----
-/^hello/
-/abc/i      // case insensitive flag
+r"^hello"
+r"(?i)abc"
 ----
 
 For more information about regular expressions read the chapter about it here: Regular Expressions.
