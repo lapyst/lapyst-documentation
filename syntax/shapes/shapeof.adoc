@@ -1,0 +1,39 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= The `shapeof` keyword
+
+toc::[]
+
+To get the shape of an instance, you can use the `shapeof` keyword:
+
+[source,lapyst]
+----
+shape Cat
+end
+
+var Cat c = new Cat();
+
+shapeof c;  // would return the 'Cat' shape
+----
+
+The importance of this keyword is better displayed when using inheritance:
+
+[source,lapyst]
+----
+chape Animal
+end
+
+shape Cat use [Animal]
+end
+
+var Animal a = new Cat();
+
+shapeof a;  // also returns the 'Cat' shape
+----
+
+As you see, the `shapeof` keyword operates on the actual shape the instance was initialy created from, not any type of an cast (may it be implicit or explicit).
+
+NOTE: You also can use it on `self` inside shapes to get the shape of the current instance!

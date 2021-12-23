@@ -246,6 +246,12 @@ As shown above, the level is counted from the shape that define the protection o
 // Super-keyword
 include::shapes/super.adoc[leveloffset=+1]
 
+// shapeof
+include::shapes/shapeof.adoc[leveloffset=+1]
+
+// instanceof
+include::shapes/instanceof.adoc[leveloffset=+1]
+
 // Generics
 include::shapes/generics.adoc[leveloffset=+1]
 
