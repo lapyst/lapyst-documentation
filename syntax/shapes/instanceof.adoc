@@ -45,3 +45,5 @@ t instanceof Cat    // yields 'true'
 
 t instanceof! Cat   // yields 'false' since 't' is a 'Tiger'
 ----
+
+NOTE: `instanceof` can also be implementing by using `cast`, since `cast` returns `nil` when the instance is not castable to the disired type. `instanceof!` could be implementing by using `shapeof` and a equality-check to an type.
