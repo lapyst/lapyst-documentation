@@ -105,3 +105,35 @@ shape FruitBasket of [ T => Fruit , const maxSize ] <1>
 end
 ----
 <1> Now `maxSize` is an type-less generic value parameter.
+
+== Generic arguments for an parent type
+
+Assume we have following shape:
+[source,lapyst]
+----
+shape MyBase of [ T ]
+    # ...
+end
+----
+
+and we now want to extend `MyBase`, but for that must give the type an generic argument. We do this like we do it when we refer to the type elsewhere:
+
+[source,lapyst]
+----
+shape MyExt use [ MyBase[int] ] <1>
+    # ...
+end
+----
+<1> this declares the parent `MyBase` to use the type `int` for its generic parameter `T`.
+
+But what if we dont know the type we should give your parent, because our extended shape has a generic type parameter as well?
+
+We then simply can reuse this parameter inside the parent declaration:
+[source,lapyst]
+----
+shape MyExt of [ T ] use [ MyBase[T] ]
+    # ...
+end
+----
+
+NOTE: If your parent generic type parameter has an lower limit (via a `=>` declaration), then your generic argument in the extened shape needs at least this limit as well. If you dont declare this, lapyst treads this as an error.
