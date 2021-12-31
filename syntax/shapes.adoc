@@ -324,3 +324,29 @@ shape MyList
     end
 end
 ----
+
+=== Dynamic shape declaration
+
+Since lapyst allows re-entry into shapes, one could assume that following code works:
+[source,lapyst]
+----
+shape MyType
+end
+
+if (something) then
+    shape MyType
+        def doSome()
+            printf("hello world\n");
+        end
+    end
+else
+    shape MyType
+        def doSome()
+            printf("hoi\n");
+        end
+    end
+end
+----
+
+But the truth is, that this is disallowed for a couple of reasons.
+The major one is, that it cna quickly get very messy and un-intuitive. Especially for beginners, in big projects or when using many dependencys. And because we already allow a ton of options for "dynamic" code (generics, re-entry, including and macros), this option dosnt add much to the table.
