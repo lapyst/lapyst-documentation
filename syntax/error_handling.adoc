@@ -90,7 +90,7 @@ def (bool) calcAndPrint(int a, int b)
         printf("Calculated:\n");
         printf("  ${text}\n");
         return false;
-    catch (e => RuntimeException) <1>
+    catch (RuntimeException e) <1>
         printf("Error: ${e.message}");
         return true;
     end
@@ -112,7 +112,7 @@ try
         throw new RuntimeException("Need at least an empty string");
     end
     // ...
-catch (e => RuntimeException) then
+catch (RuntimeException e)
     if (text == nil) then
         text = "";
         retry;
@@ -136,7 +136,7 @@ def myFunc(int a)
             throw new RuntimeException("Error");
         end
         printf("All okay\n");
-    catch (e => RuntimeException)
+    catch (RuntimeException e)
         printf("ERROR: ${e.message}\n");
     ensure
         printf("Done with try-catch...\n");
