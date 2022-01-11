@@ -1,0 +1,35 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toclevels: 3
+:toc-placement!:
+
+= References
+
+C has pointers, in lapyst we have references: they are much safer, but dosnt restrict you entirely. This is because lapyst supports reference arithmetic.
+
+toc::[]
+
+== Type modifier
+
+You've might encountered it before: lapyst allows asteriks (`*`) immediatly after the typename when declaring an variable:
+[source,lapyst]
+----
+var int* i_ptr; <1>
+----
+<1> Each asteriks added to the type means one level of reference depth.
+
+IMPORTANT: Lapyst (like C) allows references to be "stacked" or to have a "depth". This is needed in order to make double-references (or double-pointers), which are essentially just references/pointers to another reference/pointer.
+
+== Aquire a reference / De-referencing
+
+To actually get an reference we need to use a new operator: `&`, and to get it's value again, we use `*`:
+[source,lapyst]
+----
+var int i = 12;
+var int* i_ptr = &i; <1>
+
+printf("i = %d\n", *i_ptr); <2>
+----
+<1> `i_ptr` holds now an reference to `i`;
+<2> `*i_ptr` dereferences the reference, which is like we would use the variable it references (`i`)!

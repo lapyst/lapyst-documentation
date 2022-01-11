@@ -199,3 +199,6 @@ include::syntax/annotations.adoc[leveloffset=+1]
 
 // Macros
 include::syntax/macros.adoc[leveloffset+=1]
+
+// References
+include::syntax/references.adoc[leveloffset+=1]
