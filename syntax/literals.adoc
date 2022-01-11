@@ -45,6 +45,18 @@ For readability lapyst also supports an `_` underscore between the letters of ea
 0_b0100010010000100 // this is not; underscore is inside prefix
 ----
 
+Floats on the other hand can have two suffixes:
+[source,lapyst]
+----
+12.34F <1>
+12.34f <1>
+
+12.34D <2>
+12.34d <2>
+----
+<1> Floatingpoint numbers, explicit default precision
+<2> So called `doubles`: they have double the amount of space, so the have higher precision
+
 == Booleans
 
 Booleans are a simple datatype to express truthiness, this means they can either be `true` or `false`. These are by the way also the keywords in lapyst for the both only valid states of an boolean:
