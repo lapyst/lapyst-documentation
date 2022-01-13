@@ -29,4 +29,77 @@ var t = new MyCode::Test(); <1>
 
 IMPORTANT: A namespace is NOT a type and cannot be instanciated. You also dont need to use the `static` keyword on any function in an namespace like you would in an shape.
 
-NOTE: A namespace can be re-opened at a later point to add new content to it. Note however that overwriting of previous defined elements  only works for methods.
+NOTE: A namespace can be re-opened at a later point to add new content to it. Note however that overwriting of previous defined elements only works for methods.
+
+== Using deeply nested namespaces
+
+We face a inconvenience when working with deep nested namespaces:
+
+[source,lapyst]
+----
+namespace My
+    namespace Very
+        namespace Deep
+            namespace Hidden
+                shape Cat
+                end
+            end
+        end
+    end
+end
+
+var My::Very::Deep::Hidden::Cat cat_one;
+var My::Very::Deep::Hidden::Cat cat_two;
+var My::Very::Deep::Hidden::Cat cat_three;
+----
+
+In order to not write tedious long namespace paths every time, you can use `using namespace` syntax:
+
+[source,lapyst]
+----
+namespace My
+    namespace Very
+        namespace Deep
+            namespace Hidden
+                shape Cat
+                end
+            end
+        end
+    end
+end
+
+using namespace My::Very::Deep::Hidden;
+
+var Cat cat_one;
+var Cat cat_two;
+var Cat cat_three;
+----
+
+This way, you only need to write the lengthy namespace path once and cann then use all of its content relatiely, like its content was actually defined inside your current namespace!
+
+It's important to note, that `using namespace` dosnt publish the referenced namespace outside of the namespace it's used in. Consider following example:
+
+[source,lapyst]
+----
+namespace My
+    namespace Very
+        namespace Deep
+            namespace Hidden
+                shape Cat
+                end
+            end
+        end
+    end
+end
+
+namespace SomeWhereOther
+    using namespace My::Very::Deep::Hidden;
+
+    var Cat cat_one;
+    var Cat cat_two;
+    var Cat cat_three;
+end
+
+var SomeWhereOther::Cat cat_four; <1>
+----
+<1> This line fails: `Cat` is no member of `SomeWhereOther`; we only can use `Cat` inside `SomeWhereOther` to reference the shape `Cat` inside `My::Very::Deep::Hidden`.
