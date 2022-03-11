@@ -77,7 +77,7 @@ IMPORTANT: if the namespace (in our case `libHello`) would exists beforehand, la
 
 IMPORTANT: Name-clashing for functions only occure when they have the same signature. If not, lapyst treads the functions as overloads to each other!
 
-=== the `use` modifier
+=== importing only specific symbols
 
 Lapyst also supports importing only certain elements of an file:
 
@@ -91,15 +91,27 @@ end
 def say_goodbye()
     printf("Goodbye...");
 end
+
+def say_good_morning(string name)
+    printf("Good morning, ${name}");
+end
 ----
 
 .File: test.lp
 [source,lapyst]
 ----
-import "./test.lp" use [say_hello];
+import [ say_hello, say_good_morning ] from "./test.lp";
 
 say_hello();
 say_goodbye();  # Error since we only imported say_hello
+----
+
+If you only want to import a single symbol, you can ommit the square brackets:
+
+.File: test.lp
+[source,lapyst]
+----
+import say_hello from "./test.lp";
 ----
 
 == The `export` keyword
