@@ -201,7 +201,7 @@ Then it's time for protected fields:
 [source,lapyst]
 ----
 shape Animal
-    var int *weight;
+    var int *weight; <1>
 end
 
 shape Cat use [Animal]
