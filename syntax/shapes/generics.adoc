@@ -65,18 +65,18 @@ shape Carrot
 end
 
 // This is ok since 'Fruit' itself is an 'Fruit'
-var FruitBasket fbasket = new FruitBasket[Fruit]();
+var FruitBasket[Fruit] fbasket = new FruitBasket[Fruit]();
 
 // This one works too, since the parent of 'Apple' is 'Fruit'
-var FruitBasket abasket = new FruitBasket[Apple]();
+var FruitBasket[Apple] abasket = new FruitBasket[Apple]();
 
 // Also works, since 'SpecialApple' has the parent 'Apple',
 // wich then has the parent 'Fruit'
-var FruitBasket sabasket = new FruitBasket[SpecialApple]();
+var FruitBasket[SpecialApple] sabasket = new FruitBasket[SpecialApple]();
 
 // This will throw an error, because `Carrot` dosn't have
 // `Fruit` in their anchestors
-var FruitBasket cbasket = new FruitBasket[Carrot]();
+var FruitBasket[Carrot] cbasket = new FruitBasket[Carrot]();
 ----
 
 == Generic value parameters
