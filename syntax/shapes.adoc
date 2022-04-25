@@ -121,6 +121,25 @@ include::shapes/self.adoc[leveloffset=+1]
 // constructor
 include::shapes/constructor.adoc[leveloffset=+1]
 
+=== Static fields
+
+We also can have static fields! Static fields act like normal variables in namespaces:
+
+[source,lapyst]
+----
+shape Bank
+
+    static var Bank instance = new Bank();
+
+    def (float) getBalanceFor(string name)
+        # ...
+    end
+
+end
+
+Bank.instance.getBalanceFor("bob");
+----
+
 == Inheritance
 
 shapes are all cool but what if we have two shapes, say `Cat` and `Dog` which have many things in common? It would be a bit tedious to write them both from scratch isn't it? Lucky for us that we have inheritance! It allows us to declare a "parent" shape for each shape which then inherit all fields and methods of the parent:
