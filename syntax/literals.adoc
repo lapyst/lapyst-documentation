@@ -83,6 +83,16 @@ There are a few rules for a identifier:
 - they cannot have an whitespace or an linebreak in them
 - they cannot start with an number
 
+With that knowlage lets look at an quick example:
+[source, lapyst]
+----
+var myFancyVariableName;
+
+// these two dont work:
+var not-working;
+var also not working;
+----
+
 == Strings
 
 Lapyst only supports one type of string literal: double-quoted.
