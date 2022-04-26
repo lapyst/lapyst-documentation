@@ -36,10 +36,10 @@ var int i = 0
 do
     // ...
     i += 1;
-while (i < 10) end
+while (i < 10)
 ----
 
-This loops first runs the loop's body (from `do` to the `while`) and then checks if the condition is true, when it is its once again executes the loop's body, if not it simple resumes normal execution after the `end`.
+This loops first runs the loop's body (from `do` to the `while`) and then checks if the condition is true, when it is its once again executes the loop's body, if not it simple resumes normal execution after the closing bracket of the `while`.
 
 == for-loop / Iterative-Loops
 
