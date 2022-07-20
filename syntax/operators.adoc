@@ -165,6 +165,26 @@ The bitwise operator group also has one unary operator: the bitwise not:
 
 This operator flips (or inverts) all bits from its input (here `a`).
 
+== The Index operator
+
+To have an simple way of getting (or setting) values from/on arrays or hashes, lapyst provides an simple-to-use syntax:
+
+[source,lapyst]
+----
+var numberList = [ 1, 2, 3, 4 ];
+
+var i = numberList[0];  // i will now contain '1'
+
+
+var ageMap = { 'John': 23, 'Maria': 25 };
+
+var j = ageMap['John'];
+----
+
+NOTE: Arrays in lapyst always begin with the index of zero.
+
+NOTE: This operator is define-able for custom objects in lapyst.
+
 == Expressions
 
 Expressions should be easy when you know math. Its simply a term or a chain of literals, variables, operators and functions:
