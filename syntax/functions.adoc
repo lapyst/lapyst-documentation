@@ -37,10 +37,14 @@ def hello()
     printf("Hello, world!");
 end
 
-hello();
+def main()
+    hello();
+end
 ----
 
-When we now run this code, we should see the text 'Hello, world!' on the screen.
+When we now run this code, we should see the text 'Hello, world!' on the screen. You might ask whats the difference here, since we are just calling our `hello` function from another one called `main`, doesn't it need to be also be called to start executing? Well yes, but `main` is special: it's the so called entry-point. This means that it's automatically get called once your program starts!
+
+NOTE: In previous examples (and in following ones), code might not be in functions, or the example dosnt have a `main` function. This is due to better readibility and the reader is supposed to call the functions themself from `main` or put the code into a proper function.
 
 == Parameters / Arguments
 
