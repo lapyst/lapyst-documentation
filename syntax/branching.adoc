@@ -104,3 +104,24 @@ end
 <3> The `break` statement, it stops the execution and resumes the code after the `end` of the switch statement.
 
 <4> With `default:` we can make an "default" branch which code gets executed if no other case above has matched. Think of it like the 'else' in an 'if'.
+
+The `break;` statements are optional and if omitted, the execution "falls through" the next case:
+
+[source,lapyst]
+----
+var int i;
+# ...
+
+switch i do
+case 1
+case 2
+    print("testing...") <1>
+case 3
+    print("one, two, or three"); <2>
+    break;
+end
+----
+<1> this gets called when i is either 1 or 2, but not if its 3
+<2> this gets called when i is either 1, 2 or 3
+
+Implicit fallthrough can be a really annoying thing, so lapyst allows you to use the `fallthrough` keyword to explicitly state that a case branch is going to fall trough into the next case. It needs to be the last statement of the case-branch.
