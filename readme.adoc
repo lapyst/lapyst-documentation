@@ -12,4 +12,8 @@ the packagemanager & buildsystem spark, technical specifications for various bac
 
 toc::[]
 
+== License
+
+The specification and this document is licensed under AGPLv3. For the full license see the LICENSE at: https://codeark.it/Lapyst/lapyst-documentation/src/branch/master/LICENSE or just beside this file in the source repo.
+
 include::syntax.adoc[leveloffset=+1]
