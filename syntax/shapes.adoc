@@ -121,6 +121,9 @@ include::shapes/self.adoc[leveloffset=+1]
 // constructor
 include::shapes/constructor.adoc[leveloffset=+1]
 
+// destructor
+include::shapes/destructor.adoc[leveloffset=+1]
+
 === Static fields
 
 We also can have static fields! Static fields act like normal variables in namespaces:
