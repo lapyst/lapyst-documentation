@@ -1,0 +1,57 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+= Destructor
+
+toc::[]
+
+The destructor is just like the constructor an special method: it get's called when we destroy a shape.
+
+[source,lapyst]
+----
+shape ApiClient
+    var string token;
+
+    def ~ApiClient() <1>
+        self.logout(token);
+    end
+end
+
+var ApiClient c = new ApiClient();
+drop c; <2>
+----
+<1> This is an destructor, it's essentally a method thats named like the shape but begins with an tilde (`~`).
+<2> Using the keyword `drop`, we can trigger the destructor explicitly.
+
+NOTE: If you don't declare any explicit destructor, lapyst implicit declares an default destructor. It takes no arguments and just drops all other shape-like members of a shape.
+
+IMPORTANT: If you declare *ANY* destructor the default destructor is no longer created by lapyst.
+
+IMPORTANT: In your own destructor, you need to drop all other shape-like members by yourself.
+
+== Overloading & return types
+
+Because destructors in lapyst are essential just methods, they are also allowed to have parameters and/or return types.
+
+[source,lapyst]
+----
+shape ApiClient
+    var string token;
+
+    def (int) ~ApiClient(string reason) <1>
+        var Response resp = self.logout(token, reason);
+        return resp.status;
+    end
+end
+
+var ApiClient c = new ApiClient();
+var int status = drop c, "test reason"; <2>
+----
+<1> A destructor with both a return type as well as a parameter
+<2> Here we call our custom defined destructor; parameters to `drop` are split with commas (`,`) while the first always must be the object we want to destroy.
+
+== Inheritence
+
+To ensure that all resources are cleaned up properly, lapyst inserts calls to parent destructors in all destructors (if they have parents of course). This is done just like in constructors, but instead of adding the call to the start, it adds it to the end of the destructor, so you can work with the object in your destructor like normal. To explicitly call the parent destructor, just use `super()` again, which also prevents the implicit injection of the destructor.

@@ -41,3 +41,7 @@ This means effectivly means:
 - public is still what it is: public
 
 To express the visibility, you simply use the same visibilty syntax as for methods.
+
+== Inheritance
+
+To call a parent's constructor, simply use `super()` inside the constructor. If not used, lapyst inserts it automatically to ensure proper initialization; it's inserted before your constructor so you have access to all initialized stuff from the parent(s).
