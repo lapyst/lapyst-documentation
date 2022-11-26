@@ -17,7 +17,7 @@ Lets first look at how to write the annotation itself:
 ----
 @some_annotation <1>
 
-@some_annotation{number=12}
+@some_annotation{number=12} <2>
 ----
 <1> The annotation `some_annotation`, without parameters
 <2> The annotation `some_annotation`, this time with parameters: We set the parameter `number` to the number `12`.
