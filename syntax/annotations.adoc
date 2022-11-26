@@ -94,6 +94,8 @@ end
 var @type_annotation c;
 
 c = new MyContainer[ @type_annotation int, 12, 1 ]();
+
+f = cast d to @type_annotation F;
 ----
 
 == Declaration
