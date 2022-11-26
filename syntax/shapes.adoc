@@ -92,6 +92,8 @@ a.make_noise(); <1>
 
 Methods also supports the same parameter and return functionalities we know from functions.
 
+== Static members
+
 === Static methods
 
 A problem with methods is we cannot use them without an instance of the shape. But fear not: theres an solution to this problem: static methods! Static methods are essentially methods (or functions) that you can call without an instance of the shape.
@@ -142,6 +144,24 @@ end
 
 Bank.instance.getBalanceFor("bob");
 ----
+
+=== Static blocks
+
+Since we now have static fields we also need a way to initialize them. This is were static blocks come into play: each shape can have exactly one, to be run statically at programm startup.
+
+[source,layst]
+----
+shape Random
+
+    static var int seed;
+
+    do static <1>
+        seed = getRandomSeed();
+    end
+
+end
+----
+<1> Do static opens a static block; it's content is essentially just a static method.
 
 == Inheritance
 
