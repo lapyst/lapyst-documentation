@@ -45,3 +45,34 @@ To express the visibility, you simply use the same visibilty syntax as for metho
 == Inheritance
 
 To call a parent's constructor, simply use `super()` inside the constructor. If not used, lapyst inserts it automatically to ensure proper initialization; it's inserted before your constructor so you have access to all initialized stuff from the parent(s).
+
+== Named constructors
+
+Lapyst allows for definition of named constructors:
+
+[source,lapyst]
+----
+shape Car
+    var int kmh;
+
+    def Car(int kmh) <1>
+        self.kmh = kmh;
+    end
+
+    def Car::from_miles(int mph) <2>
+        # ...
+    end
+end
+
+var Car car1 = new Car(100); <3>
+var Car car2 = new Car::from_miles(100); <4>
+----
+<1> Normal constructor.
+<2> Named constructor.
+<3> Calls the normal constructor, can also be used in explicit form as `Car::Car`.
+<4> Calls the named constructor `from_miles`
+
+Apart from the additional name, named constructors behave excactly as the normal constructor, means that if you
+have not calles `super()` in it, it's inserted automatically at the beginning.
+
+NOTE: A named constructor DOES NOT automatically calls the normal constructor; it only calls the normal constructor of all supertypes.
