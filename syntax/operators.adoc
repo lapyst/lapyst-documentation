@@ -154,8 +154,8 @@ a ^= b <5>
 <1> equivalent to `a = a << b;`
 <2> equivalent to `a = a >> b;`
 <3> equivalent to `a = a & b;`
-<3> equivalent to `a = a | b;`
-<3> equivalent to `a = a ^ b;`
+<4> equivalent to `a = a | b;`
+<5> equivalent to `a = a ^ b;`
 
 The bitwise operator group also has one unary operator: the bitwise not:
 [source,lapyst]
