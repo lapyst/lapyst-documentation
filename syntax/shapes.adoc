@@ -301,7 +301,13 @@ include::shapes/generics.adoc[leveloffset=+1]
 include::shapes/casting.adoc[leveloffset=+1]
 
 // Properties
+ifdef::backend-pdf[]
 include::shapes/properties.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Properties
+See xref:shape/properties.adoc[here]
+endif::[]
 
 == Re-Entry of shapes
 
