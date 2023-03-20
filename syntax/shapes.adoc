@@ -306,7 +306,7 @@ include::shapes/properties.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Properties
-See xref:shape/properties.adoc[here]
+See xref:shapes/properties.adoc[here]
 endif::[]
 
 == Re-Entry of shapes
