@@ -277,7 +277,7 @@ endif::[]
 
 // Macros
 ifdef::backend-pdf[]
-include::syntax/macros.adoc[leveloffset+=1]
+include::syntax/macros.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Macros
@@ -286,7 +286,7 @@ endif::[]
 
 // References
 ifdef::backend-pdf[]
-include::syntax/references.adoc[leveloffset+=1]
+include::syntax/references.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == References
