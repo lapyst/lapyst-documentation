@@ -129,7 +129,8 @@ a << b  // shifts the value of 'a' by 'b' bits to the left
 a >> b  // shifts the value of 'a' by 'b' bits to the right
 
 /*
-    Bitwise - logical operations <1>. Typicalls supported by both numeric and boolean types.
+    Bitwise - logical operations. <1>
+    Typicalls supported by both numeric and boolean types.
 */
 a & b   // bitwise and. also works like a non-lazy-evaluated 'and'
 
