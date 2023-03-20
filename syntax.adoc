@@ -36,10 +36,22 @@ This is an very-very special character: it tells lapyst that an portion of the c
 It's hard to explain this right at the start, you get it when we move further. The only thing to rember is that this character itself does not modify your data or anything. It's for lapyst to find yout when an portion of code ends and it can take it and do it's magic.
 
 // Literals
+ifdef::backend-pdf[]
 include::syntax/literals.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Literals
+See link:syntax/literals.adoc[here].
+endif::[]
 
 // Operators
+ifdef::backend-pdf[]
 include::syntax/operators.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Operators
+See link:syntax/operators.adoc[here].
+endif::[]
 
 == Declaration of Variables
 
@@ -165,40 +177,118 @@ Type-less constants are possible but they have no benefit over typed constants, 
 ====
 
 // Functions
+ifdef::backend-pdf[]
 include::syntax/functions.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Procedures/Functions
+See link:syntax/functions.adoc[here].
+endif::[]
 
 // Branching
+ifdef::backend-pdf[]
 include::syntax/branching.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Branching
+See link:syntax/branching.adoc[here].
+endif::[]
 
 // Loops
+ifdef::backend-pdf[]
 include::syntax/loops.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Loops
+See link:syntax/loops.adoc[here].
+endif::[]
 
 // Error handling
+ifdef::backend-pdf[]
 include::syntax/error_handling.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Error Handling
+See link:syntax/error_handling.adoc[here].
+endif::[]
 
 // Shapes
+ifdef::backend-pdf[]
 include::syntax/shapes.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Shapes
+See link:syntax/shapes.adoc[here].
+endif::[]
 
 // Namespaces
+ifdef::backend-pdf[]
 include::syntax/namespaces.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Namespaces
+See link:syntax/namespaces.adoc[here].
+endif::[]
 
 // Im/Exporting
+ifdef::backend-pdf[]
 include::syntax/im_export.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Im/Exporting
+See link:syntax/im_export.adoc[here].
+endif::[]
 
 // Roles
+ifdef::backend-pdf[]
 include::syntax/roles.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Roles
+See link:syntax/roles.adoc[here].
+endif::[]
 
 // Modules
+ifdef::backend-pdf[]
 include::syntax/modules.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Modules
+See link:syntax/modules.adoc[here].
+endif::[]
 
 // Enums
+ifdef::backend-pdf[]
 include::syntax/enum.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Enum
+See link:syntax/enum.adoc[here].
+endif::[]
 
 // Annotations
+ifdef::backend-pdf[]
 include::syntax/annotations.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Annotations
+See link:syntax/annotations.adoc[here].
+endif::[]
 
 // Macros
+ifdef::backend-pdf[]
 include::syntax/macros.adoc[leveloffset+=1]
+endif::[]
+ifndef::backend-pdf[]
+== Macros
+See link:syntax/macros.adoc[here].
+endif::[]
 
 // References
+ifdef::backend-pdf[]
 include::syntax/references.adoc[leveloffset+=1]
+endif::[]
+ifndef::backend-pdf[]
+== References
+See link:syntax/references.adoc[here].
+endif::[]
