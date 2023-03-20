@@ -3,7 +3,7 @@
 :toc:
 :toc-placement!:
 
-= The super keyword
+= The `super` keyword
 
 toc::[]
 

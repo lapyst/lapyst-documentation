@@ -118,13 +118,31 @@ Car.canHaveWheels();    # this works
 ----
 
 // self keyword
+ifdef::backend-pdf[]
 include::shapes/self.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== The `self` keyword
+See link:shapes/self.adoc[here].
+endif::[]
 
 // constructor
+ifdef::backend-pdf[]
 include::shapes/constructor.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Constructor
+See link:shapes/constructor.adoc[here].
+endif::[]
 
 // destructor
+ifdef::backend-pdf[]
 include::shapes/destructor.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Destructor
+See link:shapes/destructor.adoc[here].
+endif::[]
 
 === Static fields
 
@@ -286,19 +304,49 @@ end
 As shown above, the level is counted from the shape that define the protection onwards.
 
 // Super-keyword
+ifdef::backend-pdf[]
 include::shapes/super.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== The `super` keyword
+See link:shapes/super.adoc[here].
+endif::[]
 
 // shapeof
+ifdef::backend-pdf[]
 include::shapes/shapeof.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== The `shapeof` keyword
+See link:shapes/shapeof.adoc[here].
+endif::[]
 
 // instanceof
+ifdef::backend-pdf[]
 include::shapes/instanceof.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== The `instanceof` keyword
+See link:shapes/instanceof.adoc[here].
+endif::[]
 
 // Generics
+ifdef::backend-pdf[]
 include::shapes/generics.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Generics
+See link:shapes/generics.adoc[here].
+endif::[]
 
 // Casting
+ifdef::backend-pdf[]
 include::shapes/casting.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Casting
+See link:shapes/casting.adoc[here].
+endif::[]
 
 // Properties
 ifdef::backend-pdf[]

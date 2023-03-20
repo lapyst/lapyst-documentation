@@ -3,7 +3,7 @@
 :toc:
 :toc-placement!:
 
-= The self keyword
+= The `self` keyword
 
 toc::[]
 
