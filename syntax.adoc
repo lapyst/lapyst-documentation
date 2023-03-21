@@ -111,7 +111,7 @@ For more informations about all native types, their restrictions and more, see b
 
 Here an full example:
 
-[source,laypst]
+[source,lapyst]
 ----
 var int i;
 i = 12;
@@ -125,7 +125,7 @@ var int j = 12;
 You might have noticed the simecolons in the examples.
 Let us take a look at the first two lines of the full example:
 
-[source,laypst]
+[source,lapyst]
 ----
 var int i;
 i = 12;

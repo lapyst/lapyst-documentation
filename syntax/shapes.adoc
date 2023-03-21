@@ -167,7 +167,7 @@ Bank.instance.getBalanceFor("bob");
 
 Since we now have static fields we also need a way to initialize them. This is were static blocks come into play: each shape can have exactly one, to be run statically at programm startup.
 
-[source,layst]
+[source,lapyst]
 ----
 shape Random
 
@@ -362,7 +362,7 @@ endif::[]
 Lapyst supports re-entry into all shape-contexts like ruby does. But what does "re-entry" (or "re-opening") means?
 It simply means that you can re-open the shape after the `end`-keyword that closes the shape to add more stuff to it:
 
-[source, lapyst]
+[source,lapyst]
 ----
 shape Animal <1>
     var int height;

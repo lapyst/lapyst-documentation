@@ -109,7 +109,7 @@ var SomeWhereOther::Cat cat_four; <1>
 Sometimes you just need one Symbol (Class, Namespace, Function, Variable) form another namespace and dont want to import just anything whats in that other namespace.
 
 For this, use can use following syntax:
-[source, lapyst]
+[source,lapyst]
 ----
 namespace SomeWhereOther
     use My::Very::Deep::Hidden; <1>
@@ -120,7 +120,7 @@ end
 <1> Note the missing `namespace` keyword; with this we only import the symbol of the namespace, but not everything inside the namespace iself.
 
 With this variant, you also can rename the symbol inside the new namespace, you just need to add the `as` keyword and the new identifier it should be known inside the current namespace:
-[source, lapyst]
+[source,lapyst]
 ----
 namespace SomeWhereOther
     use My::Very::Deep::Hidden::Cat as Tiger;

@@ -11,7 +11,7 @@ As we learned previous, with the `shapeof` keyword can we get the current shape 
 
 This is why lapyst also has the `instanceof` keyword:
 
-[source, lapyst]
+[source,lapyst]
 ----
 shape Cat
 end

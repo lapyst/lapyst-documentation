@@ -60,7 +60,7 @@ Because of this problem, lapyst will produce an compile error.
 To avoid this, you can import into a namespace rather than global space:
 
 .File: test_fixed.lp
-[source,lapyt]
+[source,lapyst]
 ----
 def say_hello()
     printf("Hello!");
