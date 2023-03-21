@@ -5,10 +5,8 @@ pipeline {
         stage("Build pdf's") {
             steps {
                 sh 'pacman --noconfirm -Syu && pacman --noconfirm -S ruby'
-                sh 'echo "export GEM_HOME=\\"$(ruby -e \'puts Gem.user_dir\')\\"" >> .bashrc'
-                sh 'echo "export PATH=\\"$PATH:$GEM_HOME/bin\\"" >> .bashrc'
                 sh 'gem install asciidoctor asciidoctor-pdf rouge lapyst-rouge'
-                sh 'asciidoctor -r asciidoctor-pdf -r lapyst-rouge -b pdf ./readme.adoc'
+                sh 'PATH="$PATH:$(ruby -e \'puts Gem.user_dir\')" asciidoctor -r asciidoctor-pdf -r lapyst-rouge -b pdf ./readme.adoc'
                 sh 'mv readme.pdf lapyst-full-docs.pdf'
                 archiveArtifacts artifacts: '*.pdf', followSymlinks: false
             }
