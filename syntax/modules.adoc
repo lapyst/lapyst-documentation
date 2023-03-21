@@ -8,7 +8,7 @@
 
 toc::[]
 
-Lapyst allows you to extend an shape through an third mean besides inheritance an re-entry: you also can simply 'include' code!
+Lapyst allows you to extend an shape through an second mean besides inheritance: you also can simply 'include' code!
 Lets have a look on how this works:
 
 [source,lapyst]
