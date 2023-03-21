@@ -177,9 +177,9 @@ var numberList = [ 1, 2, 3, 4 ];
 var i = numberList[0];  // i will now contain '1'
 
 
-var ageMap = { 'John': 23, 'Maria': 25 };
+var ageMap = { "John": 23, "Maria": 25 };
 
-var j = ageMap['John'];
+var j = ageMap["John"];
 ----
 
 NOTE: Arrays in lapyst always begin with the index of zero.

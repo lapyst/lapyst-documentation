@@ -175,6 +175,6 @@ Hashes are an map-like structure meaning they store a value based on their key.
 
 [source,lapyst]
 ----
-{ 'name': 'John', key: 12 } <1>
+{ "name": "John", key: 12 } <1>
 ----
 <1> Note that keys can also be other variables!
