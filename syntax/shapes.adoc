@@ -117,33 +117,6 @@ Car.getWheels();        # this fails
 Car.canHaveWheels();    # this works
 ----
 
-// self keyword
-ifdef::backend-pdf[]
-include::shapes/self.adoc[leveloffset=+1]
-endif::[]
-ifndef::backend-pdf[]
-== The `self` keyword
-See link:shapes/self.adoc[here].
-endif::[]
-
-// constructor
-ifdef::backend-pdf[]
-include::shapes/constructor.adoc[leveloffset=+1]
-endif::[]
-ifndef::backend-pdf[]
-== Constructor
-See link:shapes/constructor.adoc[here].
-endif::[]
-
-// destructor
-ifdef::backend-pdf[]
-include::shapes/destructor.adoc[leveloffset=+1]
-endif::[]
-ifndef::backend-pdf[]
-== Destructor
-See link:shapes/destructor.adoc[here].
-endif::[]
-
 === Static fields
 
 We also can have static fields! Static fields act like normal variables in namespaces:
@@ -180,6 +153,33 @@ shape Random
 end
 ----
 <1> Do static opens a static block; it's content is essentially just a static method.
+
+// self keyword
+ifdef::backend-pdf[]
+include::shapes/self.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== The `self` keyword
+See link:shapes/self.adoc[here].
+endif::[]
+
+// constructor
+ifdef::backend-pdf[]
+include::shapes/constructor.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Constructor
+See link:shapes/constructor.adoc[here].
+endif::[]
+
+// destructor
+ifdef::backend-pdf[]
+include::shapes/destructor.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Destructor
+See link:shapes/destructor.adoc[here].
+endif::[]
 
 == Inheritance
 
