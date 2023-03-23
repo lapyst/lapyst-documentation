@@ -1,0 +1,78 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toclevels: 4
+:toc-placement!:
+
+= Name mangling
+
+Name mangling refers to the techniqe of compilers to take an name (or whole signature) of an function, constant or otherwise global accessible structure and transforming it into an single, linear string that describes the element.
+
+This process needs to be done after very specific rules to ensure that no two different elements can produce the same string. In this document you can find the default name mangling of lapyst's llvm backend.
+
+== Primitive types
+
+Primitive types mostly have a single letter representation:
+
+[cols="1,1"]
+|====
+| Type               | Symbol
+| `int8`, `char`     | `C`
+| `uint8`, `byte`    | `c`
+
+| `int16`, `short`   | `S`
+| `uint16`, `ushort` | `s`
+
+| `int32`, `int`     | `I`
+| `uint32`, `uint`   | `i`
+
+| `int64`, `long`    | `L`
+| `uint64`, `ulong`  | `l`
+
+| `f32`, `float`     | `f`
+| `f64`, `double`    | `d`
+
+| `bool` | `b`
+| `cstr` | `z`
+| `void` | `V`
+
+| `carray[T]` | `[T;`
+|====
+
+== Named types
+
+Named types will be mangled after following schema: `N<name>;`. For example, the name `My::Long::Namespace` will get mangled into `NMy:Long:Namespace;`.
+
+== Function Types
+
+Function types use following schema: `F<return>:<param>;`. For example, a function type with the returntype of an `int` and the parameters `cstr` and `byte` will get mangled into `FI:zc;`.
+
+== Pointers
+
+Pointers (i.e. `T**`) are mangled by simply appending `p`'s to the mangled type; so `int**` gets `Ipp` and `My::Long::Namespace::Shape` will get `LMy:Long:Namespace:Shape;pp`.
+
+== Functions
+
+Functions itself also need to get mangled: `lp_<return>_<name>_<params>`. This means that the function `def int myFunc(cstr a, byte b)` gets mangled into `lp_I_myFunc_zc`. If no returntype is given, void is assumed. If no parametertype is given, the while params section (and the underscore before it), will be omitted.
+
+The name must also be a fully qualified one; so if the function mentioned above is insde a namespace, say `myLib`, the mangled name becomes `lp_I_myLib:myFunc_zc`.
+
+== Methods
+
+Methods are mangled just like functions, with two additions:
+- For thunk-methods (wrappers we use in vtables to call methods of an shape up the inheritance tree from a lower shape), simply get an `;T` tag after their name and before the underscore for the parameters. So for a method `def int myFunc(cstr a, byte b)` for the shape `someShape`, the thunk method would be named `lp_I_someShape:myFunc;T_zc`.
+- Static methods get the tag `;S` added to their name, just like thunk methods.
+
+== Properties
+
+Since properties are essentially just properties they get mangled like methods (meaning they also can have the `;T` tag after their name). For example `prop int num` on `myLib::someShape`:
+- getter will be `lp_I_myLib:someShape:num`
+- setter will be `lp_V_myLib:someShape:num_I`
+
+== VTables
+
+Vtables also need to have a unique global symbol: `lp_vtab_<name>`. So for the shape `myLib::someShape`, this will be `lp_vtab_myLib:someShape`.
+
+== Static fields
+
+Static fields are globals and as such need to be mangled seperatly: `lp_<type>_<name>`.
