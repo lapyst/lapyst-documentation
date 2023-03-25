@@ -16,6 +16,8 @@ In order to make stuff in a lapyst file available that is written in another fil
 .File: hello.lp
 [source,lapyst]
 ----
+unit hello;
+
 def say_hello()
     printf("Hello world!");
 end
@@ -24,9 +26,11 @@ end
 .File: test.lp
 [source,lapyst]
 ----
-import "test.lp";
+import hello;
 
-say_hello();
+def main()
+    say_hello();
+end
 ----
 
 === the `as` modifier
@@ -38,6 +42,8 @@ When you import a file that declares an identifier but declare it also inside th
 .File hello.lp
 [source,lapyst]
 ----
+unit hello;
+
 def say_hello()
     printf("Hello world!");
 end
@@ -50,7 +56,7 @@ def say_hello()
     printf("Hello!");
 end
 
-import "hello.lp";
+import hello;
 
 say_hello(); <1>
 ----
@@ -66,7 +72,7 @@ def say_hello()
     printf("Hello!");
 end
 
-import "hello.lp" as libHello;
+import hello as libHello;
 
 say_hello();            # Refers to this file's say_hello
 
@@ -84,6 +90,8 @@ Lapyst also supports importing only certain elements of an file:
 .File: hello_v2.lp
 [source,lapyst]
 ----
+unit hello;
+
 def say_hello()
     printf("Hello!");
 end
@@ -100,7 +108,7 @@ end
 .File: test.lp
 [source,lapyst]
 ----
-import [ say_hello, say_good_morning ] from "./test.lp";
+import [ say_hello, say_good_morning ] from hello;
 
 say_hello();
 say_goodbye();  # Error since we only imported say_hello
@@ -111,7 +119,7 @@ If you only want to import a single symbol, you can ommit the square brackets:
 .File: test.lp
 [source,lapyst]
 ----
-import say_hello from "./test.lp";
+import say_hello from hello;
 ----
 
 == The `export` keyword
@@ -121,6 +129,8 @@ Per default, no imported declarations will be present when you import a file. To
 .File: hello.lp
 [source,lapyst]
 ----
+unit hello;
+
 def say_hello()
     printf("Hello!");
 end
@@ -129,7 +139,7 @@ end
 .File: export.lp
 [source,lapyst]
 ----
-import "hello.lp"
+import hello;
 
 export [ say_hello ]; <1>
 

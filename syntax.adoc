@@ -230,6 +230,15 @@ ifndef::backend-pdf[]
 See link:syntax/namespaces.adoc[here].
 endif::[]
 
+// Units
+ifdef::backend-pdf[]
+include::syntax/units.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Units
+See link:syntax/units.adoc[here].
+endif::[]
+
 // Im/Exporting
 ifdef::backend-pdf[]
 include::syntax/im_export.adoc[leveloffset=+1]
