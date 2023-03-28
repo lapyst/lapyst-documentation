@@ -117,14 +117,14 @@ Lapyst actually prevents this code form beeing compiled: if the compiler detects
 shape D use [B,C]
 
     def display()
-        super[B].display(); <1>
-        super[C].display();
+        super<B>.display(); <1>
+        super<C>.display();
     end
 
 end
 ----
 <1> Notice that this super has the parent's shape name in brackets, this tells lapyst that we want to call a method from an specific parent, here `B`.
 
-NOTE: The `super` keyword not only supports to specify the parent you want to use, but also a way to specify ALL parents: `super[*].display()`. This only works for method calls and field assignments, but NOT on reading fields.
+NOTE: The `super` keyword not only supports to specify the parent you want to use, but also a way to specify ALL parents: `super<*>.display()`. This only works for method calls and field assignments, but NOT on reading fields.
 
-NOTE: The bracket syntax also works when using super as an method: `super[B]()` or `super[*]()`.
+NOTE: The bracket syntax also works when using super as an method: `super<B>()` or `super<*>()`.
