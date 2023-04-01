@@ -65,7 +65,7 @@ This annotation can give your macro extra information where the macro itself can
 macro attr_reader(Symbol name)
     type = context.getField(name).getType();
     !!
-        def ({{type}}) !{{name}}
+        def {{type}} !{{name}}
             return self.{{name}}
         end
     !!

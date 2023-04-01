@@ -90,7 +90,7 @@ Let's expand our `FruitBasket` shape from before to contain an maximum of fruits
 shape FruitBasket of [ T => Fruit , int maxSize ]
     var T content;
 
-    def (int) getMaxSize()
+    def int getMaxSize()
         return maxSize; <1>
     end
 end

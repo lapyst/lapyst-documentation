@@ -103,11 +103,11 @@ To make an method static, you use the `static` keyword after the `def` keyword:
 [source,lapyst]
 ----
 shape Car
-    def (int) !getWheels()
+    def int !getWheels()
         return 4;
     end
 
-    def static (bool) !canHaveWheels()
+    def static bool !canHaveWheels()
         return true;
     end
 end
@@ -127,7 +127,7 @@ shape Bank
 
     static var Bank instance = new Bank();
 
-    def (float) getBalanceFor(string name)
+    def float getBalanceFor(string name)
         # ...
     end
 

@@ -40,7 +40,7 @@ Because destructors in lapyst are essential just methods, they are also allowed 
 shape ApiClient
     var string token;
 
-    def (int) ~ApiClient(string reason) <1>
+    def int ~ApiClient(string reason) <1>
         var Response resp = self.logout(token, reason);
         return resp.status;
     end

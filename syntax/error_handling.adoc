@@ -52,7 +52,7 @@ def (string, Exception) calculateDiv(int a, int b)
     end
 end
 
-def (bool) calcAndPrint(int a, int b)
+def bool calcAndPrint(int a, int b)
     int text, err = calculateDiv(a, b);
     if (err != nil) then
         printf("Error: ${err.message}");
@@ -71,7 +71,7 @@ This is why lapyst supports exceptions: they allow us in case of an error to go 
 
 [source,lapyst]
 ----
-def (int) myDiv(int a, int b)
+def int myDiv(int a, int b)
     if (b == 0) then
         throw new RuntimeException("Division throug zero!");
     else
@@ -79,12 +79,12 @@ def (int) myDiv(int a, int b)
     end
 end
 
-def (string) calculateDiv(int a, int b)
+def string calculateDiv(int a, int b)
     int result = myDiv(a, b);
     return "${a} / ${b} = ${result}", false;
 end
 
-def (bool) calcAndPrint(int a, int b)
+def bool calcAndPrint(int a, int b)
     try
         int text = calculateDiv(a, b);
         printf("Calculated:\n");

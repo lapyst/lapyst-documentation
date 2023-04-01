@@ -15,7 +15,7 @@ shape Person
     var string name; // field
 
     prop string !Name <1>
-        def (string) get() <2>
+        def string get() <2>
             return self.name;
         end
 
