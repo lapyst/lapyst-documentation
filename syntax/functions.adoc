@@ -86,7 +86,7 @@ Theres also a new keyword: `return`. It is the keyword what actually lets us set
 
 To access the result we use the function like we would use any other expression, in the example above we use the function-call in an assignment for the variable `r`.
 
-But this dosnt stop there; lapyst allows multiple return types:
+But this dosnt stop there; lapyst supports tuples as return types:
 
 [source,lapyst]
 ----
@@ -94,12 +94,14 @@ def (int,int,int,int) arithmetic(int a, int b)
     return (a + b), (a - b), (a * b), (a / b);
 end
 
-a,b,c,d = arithmetic(2, 4);
+z = arithmetic(2, 4); <1>
+
+a,b,c,d = arithmetic(2, 4); <2>
 ----
+<1> `z` holds the tuple
+<2> here the tuple is destructed into four different variables
 
-This function returns not one, not two but FOUR values! To retrieve the distrinct values, we need once again an assigment, but this time the left side are multiple variables, seperated by commas.
-
-When there are less recievers than the function returns, the last reciever will set to an array of the remaining values (if possible). If not, the remaining values are discarded.
+When there are less recievers than the tuple holds, the last reciever will be set to a tuple of the remaining values (if possible). If not, the remaining values are discarded.
 
 == Variable arguments
 
