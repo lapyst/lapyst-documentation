@@ -186,6 +186,17 @@ NOTE: Arrays in lapyst always begin with the index of zero.
 
 NOTE: This operator is define-able for custom objects in lapyst.
 
+== nil operators
+
+Since nil is a thing in lapyst, there can often be the problem that you have an variable (or expression) that can be nil, and want to do an operation on it; you then have a whole bunch of operations for this case:
+
+[source,lapyst]
+----
+a ?? b  // expression results in `a` if a is not nil, otherwise `b` is the result
+
+a ??= b // this operator executes `a = b` but only if `a` is nil
+----
+
 == Expressions
 
 Expressions should be easy when you know math. Its simply a term or a chain of literals, variables, operators and functions:
