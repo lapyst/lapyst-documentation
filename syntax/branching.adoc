@@ -125,3 +125,7 @@ end
 <2> this gets called when i is either 1, 2 or 3
 
 Implicit fallthrough can be a really annoying thing, so lapyst allows you to use the `fallthrough` keyword to explicitly state that a case branch is going to fall trough into the next case. It needs to be the last statement of the case-branch.
+
+Note that switch statements have some restrictions:
+- cases need to be known at compile time, this means only literals or constants are allowed
+- switch statements can only work on integer values (including enums) as well as strings
