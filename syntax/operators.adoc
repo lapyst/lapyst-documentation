@@ -30,7 +30,7 @@ a + b       // addition
 a - b       // subtraction
 a * b       // multiplication
 a / b       // division
-a % b       // modulo
+a % b       // reminder (note: this is NOT modulo!)
 a ** b      // pow; calculates the power of `b` with the base `a`
 ----
 
