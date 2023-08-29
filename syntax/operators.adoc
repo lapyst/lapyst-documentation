@@ -127,6 +127,8 @@ Lapyst also supports bitwise operators:
 */
 a << b  // shifts the value of 'a' by 'b' bits to the left
 a >> b  // shifts the value of 'a' by 'b' bits to the right
+        // this is a logical right shift - or lshr for short.
+        // it means that the lefthandside of the moved data is filled with zeros.
 
 /*
     Bitwise - logical operations. <1>
