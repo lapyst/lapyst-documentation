@@ -52,6 +52,6 @@ var int status = drop c, "test reason"; <2>
 <1> A destructor with both a return type as well as a parameter
 <2> Here we call our custom defined destructor; parameters to `drop` are split with commas (`,`) while the first always must be the object we want to destroy.
 
-== Inheritence
+== Inheritence of destructors
 
 To ensure that all resources are cleaned up properly, lapyst inserts calls to parent destructors in all destructors (if they have parents of course). This is done just like in constructors, but instead of adding the call to the start, it adds it to the end of the destructor, so you can work with the object in your destructor like normal. To explicitly call the parent destructor, just use `super()` again, which also prevents the implicit injection of the destructor.
