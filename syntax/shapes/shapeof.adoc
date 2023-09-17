@@ -23,7 +23,7 @@ The importance of this keyword is better displayed when using inheritance:
 
 [source,lapyst]
 ----
-chape Animal
+shape Animal
 end
 
 shape Cat use [Animal]
