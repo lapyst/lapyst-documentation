@@ -38,7 +38,17 @@ All fields except `name` are optional.
 
 === Dependencies
 
-Dependencies need to be specied as an object of key-value pairs, where the key is the package name and the value is a string:
+Dependencies need to be specied as an object of key-value pairs, where the key is the package name and the value is either a string (equivalent to `{ "version": x }`) or a object:
+
+[source,json]
+----
+{
+    // the version specification
+    "version": "",
+}
+----
+
+Version field:
 
 - `v`: exact version
 - `&gt;v`, `&lt;v`, `&gt;=v`, `&lt;=v`: exactly what you think it is
