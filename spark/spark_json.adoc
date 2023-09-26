@@ -31,9 +31,10 @@ All fields except `name` are optional.
 == Build process fields
 
 |===
-|Name           |State      |Description
-|`dependencies` |optional   |Specifies the dependencies for this package
-|`unpack_cmds`  |optional   |Specifies commands to unpack url packages
+|Name                       |State      |Description
+|`dependencies`             |optional   |Specifies the dependencies for this package
+|`dependency_management`    |optional   |Specifies informations about dependecy management
+|`unpack_cmds`              |optional   |Specifies commands to unpack url packages
 |===
 
 === Dependencies
@@ -87,6 +88,48 @@ Format:
 
 If `#<commit-ish>` is supplied, that commit (or ref) is used for the clone.
 When instead `#semver:<semver>` is used, spark tries to match tags based on the normal semver matching rules like in "normal" version specification (see above).
+
+=== Dependency management
+
+[source,json]
+----
+{
+    "dependency_management": {
+        // Used to cache all dependencies inside the project folder
+        // can be used to create a project-wide 'vendor' folder.
+        //
+        // By default no local cache is created.
+        "local_cache": "",
+
+        // Used to specify if binary artifacts should be downloaded & used; default is false.
+        "binary_artifacts": true,
+
+        // Configuration about specific package repositories.
+        "repositories": [
+            {
+                // Url of the repo
+                "url": "",
+
+                // Used to specify if binary artifacts of this repo should be downloaded & used; default is false.
+                "binary_artifacts": true,
+
+                // Used to cache all dependencies of this repository inside the project folder
+                // can be used to create a per repository 'vendor' folder.
+                //
+                // By default no local cache is created.
+                "local_cache": "",
+
+                // Specifies a set of match regex's for package names, which should be served from this repository instead.
+                "matchers": [],
+            }
+        ],
+    }
+}
+----
+
+Url can on of the following:
+- `git:...` download repo-content from a git repo
+- `http://` and `https://` are normal spark repositories
 
 === Unpack commands
 
