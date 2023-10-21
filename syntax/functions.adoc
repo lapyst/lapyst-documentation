@@ -168,3 +168,50 @@ combine("hello", "world");  // will call combine(string a, string b)
 ----
 
 This might be hard to distingisch when using type-less variables, because then it's based on what the variable actually holds.
+
+== Generics
+
+Sometimes it might be handy to have the ability to even parameterize the types of your parameters / return would it? That what "type parameters", or more commonly known "generics" are for!
+
+[source,lapyst]
+----
+def R myFunc[R, T](T a)
+    // ...
+end
+----
+
+We see here, that between arguments (round brackets) and name of the function, is a new portion of text: thats the generics! They're contained in square brackets and are seperated via a comma, just like parameters.
+
+However we declare types here, we can use anywhere for this function: parameters, returntype or inside the functions body.
+
+If we want an type parameter to require that it extends another one, simple use following syntax:
+
+[source,lapyst]
+----
+def void myFunc[T => Fruit](T a) <1>
+    // ...
+end
+----
+<1> this function now accapts any type that extends 'Fruit'.
+
+But we could also just type 'a' as 'Fruit' you might say. That would be right, but if you want more complex type constratits this dosnt suffice:
+
+[source,lapyst]
+----
+def Fruit checkAndReturn(Fruit a)
+    // do the check
+    return a;
+end
+----
+Here we want to return the same type of fruit we passed in, but the returntype always will just return a 'Fruit', not what we passed in!
+
+If we use generics instead however:
+[source,lapyst]
+----
+def T checkAndReturn[T => Fruit](T a)
+    // do the check
+    return a;
+end
+----
+
+We still do the same; but lapyst will correctly set the returntype to the same we got from the parameter 'a'! This is important when a user of this functions wants to further use that returntype as the type it passed it to your function.
