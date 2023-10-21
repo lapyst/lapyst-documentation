@@ -17,9 +17,9 @@ toc::[]
 The specification and this document is licensed under AGPLv3. For the full license see the LICENSE at: https://codeark.it/Lapyst/lapyst-documentation/src/branch/master/LICENSE or just beside this file in the source repo.
 
 ifdef::backend-pdf[]
-include::syntax.adoc[leveloffset=+1]
+include::syntax/index.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Syntax
-See link:syntax.adoc[here].
+See link:syntax/index.adoc[here].
 endif::[]

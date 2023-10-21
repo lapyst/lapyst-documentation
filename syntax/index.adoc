@@ -37,20 +37,20 @@ It's hard to explain this right at the start, you get it when we move further. T
 
 // Literals
 ifdef::backend-pdf[]
-include::syntax/literals.adoc[leveloffset=+1]
+include::literals.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Literals
-See link:syntax/literals.adoc[here].
+See link:literals.adoc[here].
 endif::[]
 
 // Operators
 ifdef::backend-pdf[]
-include::syntax/operators.adoc[leveloffset=+1]
+include::operators.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Operators
-See link:syntax/operators.adoc[here].
+See link:operators.adoc[here].
 endif::[]
 
 == Declaration of Variables
@@ -178,126 +178,126 @@ Type-less constants are possible but they have no benefit over typed constants, 
 
 // Functions
 ifdef::backend-pdf[]
-include::syntax/functions.adoc[leveloffset=+1]
+include::functions.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Procedures/Functions
-See link:syntax/functions.adoc[here].
+See link:functions.adoc[here].
 endif::[]
 
 // Branching
 ifdef::backend-pdf[]
-include::syntax/branching.adoc[leveloffset=+1]
+include::branching.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Branching
-See link:syntax/branching.adoc[here].
+See link:branching.adoc[here].
 endif::[]
 
 // Loops
 ifdef::backend-pdf[]
-include::syntax/loops.adoc[leveloffset=+1]
+include::loops.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Loops
-See link:syntax/loops.adoc[here].
+See link:loops.adoc[here].
 endif::[]
 
 // Error handling
 ifdef::backend-pdf[]
-include::syntax/error_handling.adoc[leveloffset=+1]
+include::error_handling.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Error Handling
-See link:syntax/error_handling.adoc[here].
+See link:error_handling.adoc[here].
 endif::[]
 
 // Shapes
 ifdef::backend-pdf[]
-include::syntax/shapes.adoc[leveloffset=+1]
+include::shapes.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Shapes
-See link:syntax/shapes.adoc[here].
+See link:shapes.adoc[here].
 endif::[]
 
 // Namespaces
 ifdef::backend-pdf[]
-include::syntax/namespaces.adoc[leveloffset=+1]
+include::namespaces.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Namespaces
-See link:syntax/namespaces.adoc[here].
+See link:namespaces.adoc[here].
 endif::[]
 
 // Units
 ifdef::backend-pdf[]
-include::syntax/units.adoc[leveloffset=+1]
+include::units.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Units
-See link:syntax/units.adoc[here].
+See link:units.adoc[here].
 endif::[]
 
 // Im/Exporting
 ifdef::backend-pdf[]
-include::syntax/im_export.adoc[leveloffset=+1]
+include::im_export.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Im/Exporting
-See link:syntax/im_export.adoc[here].
+See link:im_export.adoc[here].
 endif::[]
 
 // Roles
 ifdef::backend-pdf[]
-include::syntax/roles.adoc[leveloffset=+1]
+include::roles.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Roles
-See link:syntax/roles.adoc[here].
+See link:roles.adoc[here].
 endif::[]
 
 // Modules
 ifdef::backend-pdf[]
-include::syntax/modules.adoc[leveloffset=+1]
+include::modules.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Modules
-See link:syntax/modules.adoc[here].
+See link:modules.adoc[here].
 endif::[]
 
 // Enums
 ifdef::backend-pdf[]
-include::syntax/enum.adoc[leveloffset=+1]
+include::enum.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Enum
-See link:syntax/enum.adoc[here].
+See link:enum.adoc[here].
 endif::[]
 
 // Annotations
 ifdef::backend-pdf[]
-include::syntax/annotations.adoc[leveloffset=+1]
+include::annotations.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Annotations
-See link:syntax/annotations.adoc[here].
+See link:annotations.adoc[here].
 endif::[]
 
 // Macros
 ifdef::backend-pdf[]
-include::syntax/macros.adoc[leveloffset=+1]
+include::macros.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == Macros
-See link:syntax/macros.adoc[here].
+See link:macros.adoc[here].
 endif::[]
 
 // References
 ifdef::backend-pdf[]
-include::syntax/references.adoc[leveloffset=+1]
+include::references.adoc[leveloffset=+1]
 endif::[]
 ifndef::backend-pdf[]
 == References
-See link:syntax/references.adoc[here].
+See link:references.adoc[here].
 endif::[]
