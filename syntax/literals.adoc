@@ -2,6 +2,7 @@
 :source-highlighter: rouge
 :toc:
 :toc-placement!:
+:websiteflags: norun
 
 = Literals
 

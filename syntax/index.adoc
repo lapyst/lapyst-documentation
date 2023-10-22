@@ -3,6 +3,7 @@
 :toc:
 :toclevels: 3
 :toc-placement!:
+:websiteflags: norun
 
 = Syntax
 
