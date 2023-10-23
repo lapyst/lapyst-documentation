@@ -34,7 +34,7 @@ Lapyst also supports doc-comments; a special form of comments where the standard
 
 This is an very-very special character: it tells lapyst that an portion of the code is complete and it can now "execute" it. This character is the semicolon `;`.
 
-It's hard to explain this right at the start, you get it when we move further. The only thing to rember is that this character itself does not modify your data or anything. It's for lapyst to find yout when an portion of code ends and it can take it and do it's magic.
+It's hard to explain this right at the start, you propably get it when we are further into the language. The only thing to rember is that this character itself does not modify your data or anything. It's for lapyst to find out when an portion of code ends and it can take it and do it's magic. :3
 
 // Literals
 ifdef::backend-pdf[]

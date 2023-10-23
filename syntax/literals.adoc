@@ -6,7 +6,7 @@
 
 = Literals
 
-The building blocks of every language, they express the native datatypes of an language.
+The building blocks of every language, they express the most native data types of an language.
 
 toc::[]
 
