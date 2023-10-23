@@ -12,7 +12,7 @@ toc::[]
 
 == Numbers
 
-Numbers in lapyst are written like in pretty much every other language (this includes english this time!):
+Numbers in lapyst are written like in pretty much every other language (this includes spoken ones such as english!):
 
 [source,lapyst]
 ----
@@ -20,11 +20,11 @@ Numbers in lapyst are written like in pretty much every other language (this inc
 23.22 <2>
 ----
 <1> Integer (non-fractional number)
-<2> Floatingpoint number (number with fractional part)
+<2> Floatingpoint number (number with a fractional part)
 
 Floatingpoint numbers (or floats as we will call them from now on) are always Decimal based.
 
-Integers on the other hand only defaults to the decimal representation. Lapyst include a bunch of others, each one with it's own prefix:
+Integers on the other hand only defaults to the decimal representation. Lapyst include a bunch of others, each one distinguished from one another by it's prefix:
 
 [source,lapyst]
 ----
@@ -42,11 +42,14 @@ For readability lapyst also supports an `_` underscore between the letters of ea
 
 [source,lapyst]
 ----
-0b01000100_10000100 // this is valid
-0_b0100010010000100 // this is not; underscore is inside prefix
+// this is valid
+0b01000100_10000100
+
+// this is not; underscore is inside prefix
+0_b0100010010000100
 ----
 
-Floats on the other hand can have two suffixes:
+Floats on the other hand can have optionally one of two suffixes:
 [source,lapyst]
 ----
 12.34F <1>
@@ -57,6 +60,8 @@ Floats on the other hand can have two suffixes:
 ----
 <1> Floatingpoint numbers, explicit default precision
 <2> So called `doubles`: they have double the amount of space, so the have higher precision
+
+Floatingpoint numbers that dosnt have a suffix are defaulting to `floats`, means lapyst works with them as if they had an `f` suffix.
 
 == Booleans
 
