@@ -10,9 +10,9 @@ toc::[]
 In lapyst procedures and functions are the same thing.
 To define a function we write:
 
-[source,lapyst]
+[source,lapyst,website=norun]
 ----
-def myFunc() <1>
+def void myFunc()
     // ...
 end
 ----
@@ -22,23 +22,39 @@ A body of a function is the code it holds. This is also the code that gets execu
 
 Let's write a simple example:
 
-[source,lapyst]
+[source,lapyst,website=norun]
 ----
-def hello()
+unit test;
+
+@no_mangle
+dec int printf(cstr fmt, ...); <1>
+
+def void hello()
     printf("Hello, world!");
+    return;
 end
 ----
+<1> Dont mind this; this is only needed so we can use `printf`; what it does will be explained later!
 
-This function calls, when executed, the function `printf` which is a function that prints out text to the screen. But when we run the code above, nothing is get printed! This is because we dont call our own function! So lets fix that:
+This function calls, when executed, the function `printf` which is a function that prints out text to the screen. But when we run the code above, nothing is get printed!
+
+This is because we dont call our own function! So lets fix that:
 
 [source,lapyst]
 ----
-def hello()
+unit test;
+
+@no_mangle
+dec int printf(cstr fmt, ...);
+
+def void hello()
     printf("Hello, world!");
+    return;
 end
 
-def main()
+def void main()
     hello();
+    return;
 end
 ----
 
@@ -51,33 +67,55 @@ NOTE: In previous examples (and in following ones), code might not be in functio
 Our first function is a bit boring, it dosnt do much than to group our code.
 This can be changes with parameters! They allow a function to take arguments that can change the behaviour of the function. We've already used them: the `printf` function has arguments too: the string `"Hello, world!"`.
 
-NOTE: Like variables can parameters also be typed or type-less.
+NOTE: Like variables, parameters also can be either typed or type-less.
 
 [source,lapyst]
 ----
-def good_morning(string name)
+unit test;
+
+@no_mangle
+dec int printf(cstr fmt, ...);
+
+def void good_morning(string name)
     printf("Good morning ${name}!"); <1>
+    return;
+end
+
+def void main()
+    good_morning("Mai");
+    return;
 end
 ----
 <1> we use string interpolation here to insert the value of the `name` variable into our string
 
-With this function we can now call `good_morning("Mai");` to get the text `Good morning Mai!` onto our screen! Sweet! But the truly great is we are not limited to only the string `"Mai"`. We can use any other string you like, thats the power of parameters.
+With this function we can now call `good_morning("Mai");` to get the text `Good morning Mai!` onto our screen! Sweet! But the truly great is we are not limited to only the string `"Mai"`. We can use any other string you like; thats the power of parameters.
 
 == Return values
 
 We now know how to write functions that group code and how we parameterize them so we can control the code it contains. But wouldn't be greate to also get something back from them? This is possible with return values!
 
-Basically every function can return one (or more) values. As with all type related things in lapyst we can also decide to type it or not!
+Basically every function can return one value. As with all type related things in lapyst we can also decide to type it or not!
+
+NOTE: We actually used returntypes already! They where the `void` before our function names in the examples above!
 
 First the typed example:
 
 [source,lapyst]
 ----
+unit test;
+
+@no_mangle
+dec int printf(cstr fmt, ...);
+
 def int add(int a, int b)
     return a + b;
 end
 
-var int r = add(2, 4);
+def main()
+    var int r = add(2, 4);
+    printf("r: %d", r);
+    return;
+end
 ----
 
 Lets explain the code above: we define here the function `add` which has two parameters as input: `a` and `b`, both of type `int`. We also return an `int` here; thats the `int` in paratheses right after the `def` keyword.
