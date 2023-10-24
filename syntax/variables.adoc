@@ -8,15 +8,16 @@
 
 Variables in lapyst need to be "declared", which means we must tell lapyst about there existence.
 
-But for this we first need to learn about typed and non-typed variables:
-- typed variables are typed (like their name implies) and can only hold data of their type For classes there is an extra case but we learn that in the chapter about classes.
+Variables come in two flavors:
+
+- typed variables are typed (like their name implies) and can only hold data compatible with their type
 
 - non-typed variables (sometimes also refered as type-less) are variables that don't care about what they are storing. You might heard this under the term "duck-typing".
 
 We know now that there are two types, but what do they actually DO?
 Well typed variables bring you the benefit that they also "check" the data you assign them to be of the correct type. This check is both done at compile time as well as runtime. The only "downside" of this is you cannot store arbitary data in them, but this is ok because typed variables gives us security that we indeed have data of an certain type stored.
 
-If we do not want this, or need an looser "storage", one can use type-less variables. But be warned: they can (and will!) intruduce bugs to your code. Not without reason are languages that where initiali designed without types are begining now to intruduce an optional typed mode.
+If we do not want this, or need an looser "storage", one can use type-less variables. But be warned: they can (and will!) intruduce bugs to your code. Not without reason are many languages that where initialy designed without types are begining now to intruduce an optional typed mode.
 
 Now enough the words let the syntax speak:
 
@@ -26,12 +27,6 @@ var int i;
 ----
 
 This code above declares an variable named `i` of the type integer (`int`).
-Remember `nil`: this variable is now in the "nothing" state!
-
-[source,lapyst]
-----
-i == nil    // this would be `true`
-----
 
 Since we declared `i` now, we can "store" (assign) an integer to it:
 
@@ -51,16 +46,7 @@ i = false;
 i = 12.22;  // 12.22 is an float, so it dosnt fit here because we need an integer.
 ----
 
-What we've used here as a type is an so calles native type. They are the most basic form of data and have all a literal to represent them:
-- integer
-- float
-- string
-- boolean
-- regex
-
-For more informations about all native types, their restrictions and more, see builtin types.
-
-Here an full example:
+Heres an full example:
 
 [source,lapyst]
 ----
@@ -91,7 +77,7 @@ The same as the second line: only this time its not an statement from the begin 
 
 If Variables are one side of the medal, Constants are the other: both of them store data, but variables are variable, meaning we can change what we store in them. Constants on the other hand can only store one single thing, forever.
 
-Because of this behaviour, constantants need an mandatory assignment in the declaration.
+Because of this behaviour, constants need an mandatory assignment in the declaration.
 
 [source,lapyst]
 ----
@@ -99,7 +85,7 @@ const int a = 12;       // correct
 const int b;            // incorrect, missing initializer
 ----
 
-Another thing they that they distinguishes them from variables, is that they dont allow any form of assignment:
+Another thing they that they distinguishes them from variables, is that they dont allow any form of assignment, since that whould be modification:
 
 [source,lapyst]
 ----
