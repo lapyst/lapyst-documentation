@@ -73,32 +73,6 @@ true    // also known as 'yes' or '1'
 false   // also known as 'no' or '0'
 ----
 
-== Variables
-
-Variables are to be honest not an literal in the sense they express an native datatype,
-but its an buildingblock nontheless, and the most important too!
-
-Variables in lapyst needs to be "declared" which means they dont exits when you dont tell lapyst about them. To know how to do this read Declaration of Variables. For now you only need to know they need to be declared. The name of an variable is also called an "identifier".
-
-=== Identifiers
-
-There are a few rules for a identifier:
-
-- the name cannot be a keyword (such as `true`, `false` or `end`)
-- they need to only have alphanumerical characters in them (or underscores)
-- they cannot have an whitespace or an linebreak in them
-- they cannot start with an number
-
-With that knowlage lets look at an quick example:
-[source,lapyst]
-----
-var myFancyVariableName;
-
-// these two dont work:
-var not-working;
-var also not working;
-----
-
 == Strings
 
 Lapyst only supports one type of string literal: double-quoted.
@@ -184,3 +158,25 @@ Hashes are an map-like structure meaning they store a value based on their key.
 { "name": "John", key: 12 } <1>
 ----
 <1> Note that keys can also be other variables!
+
+== Identifiers
+
+Sometimes we need to name things, to later refer to it by said name. These names are called "identifiers" (because the identify!).
+
+There are a few rules for an identifier:
+
+- the name cannot be a keyword (such as `true`, `false` or `end`)
+- they need to only have alphanumerical characters in them (or underscores)
+- they cannot have an whitespace or an linebreak in them
+- they cannot start with an number
+
+With that knowlage lets look at an quick example:
+[source,lapyst]
+----
+myFancyVariableName
+
+// these two dont work:
+not-working
+
+also not working
+----
