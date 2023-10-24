@@ -54,15 +54,6 @@ ifndef::backend-pdf[]
 See link:types.adoc[here].
 endif::[]
 
-// Operators
-ifdef::backend-pdf[]
-include::operators.adoc[leveloffset=+1]
-endif::[]
-ifndef::backend-pdf[]
-== Operators
-See link:operators.adoc[here].
-endif::[]
-
 // Variables
 ifdef::backend-pdf[]
 include::variables.adoc[leveloffset=+1]
@@ -70,6 +61,15 @@ endif::[]
 ifndef::backend-pdf[]
 == Variables
 See link:variables.adoc[here].
+endif::[]
+
+// Operators
+ifdef::backend-pdf[]
+include::operators.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Operators
+See link:operators.adoc[here].
 endif::[]
 
 // Functions
