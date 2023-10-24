@@ -165,6 +165,8 @@ It is *not* allowed to construct escape sequences via interpolation, so this isn
 
 Lapyst supports nullni-ness or rather nilni-ness, which means that variables can have a state of "nothing", where they hold... nothing. This is typically the case right after you decalred a variable but assignent nothing to it.
 
+IMPORTANT: the behavior of `defaults to nil` is only true for some of lapyt's types. For example, neraly all basic types aren't by default nil but have their own default value. See xref:types.adoc#_basic_types[Basic types] for more information about this.
+
 You can use the literal `nil` to check if a variable indeed holds nothing, or to reset an variable to this state of nothingness. This will also destroy objects an free them if neccessary.
 
 [source,lapyst]
