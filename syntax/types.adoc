@@ -10,6 +10,17 @@ In lapyst data can be strongly typed; which means you tell the compiler what typ
 
 toc::[]
 
+== Syntax
+
+Types are refered by their link:./literals.adoc#_identifiers[Identifier]. For example: `int8`. Sometimes however, a type needs so called "type arguments", or "generics". They are written by adding them as a list enclosed in square brackets after the type:
+
+[source,lapyst]
+----
+carray[int, 3]
+----
+
+For now you just need to know they can either be other types or literals. For more information on them, see link:./generics.adoc[the chapter about them].
+
 == Basic types
 
 The most basic types lapyst has, are the ones xref:literals.adoc[Literals] themselfs have:
