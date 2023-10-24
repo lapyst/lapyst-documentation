@@ -63,128 +63,14 @@ ifndef::backend-pdf[]
 See link:operators.adoc[here].
 endif::[]
 
-== Declaration of Variables
-
-As we have written above: variables in lapyst need to be "declared", which means we must tell lapyst about there existence.
-
-But for this we first need to learn about typed and non-typed variables:
-- typed variables are typed (like their name implies) and can only hold data of their type For classes there is an extra case but we learn that in the chapter about classes.
-
-- non-typed variables (sometimes also refered as type-less) are variables that don't care about what they are storing. You might heard this under the term "duck-typing".
-
-We know now that there are two types, but what do they actually DO?
-Well typed variables bring you the benefit that they also "check" the data you assign them to be of the correct type. This check is both done at compile time as well as runtime. The only "downside" of this is you cannot store arbitary data in them, but this is ok because typed variables gives us security that we indeed have data of an certain type stored.
-
-If we do not want this, or need an looser "storage", one can use type-less variables. But be warned: they can (and will!) intruduce bugs to your code. Not without reason are languages that where initiali designed without types are begining now to intruduce an optional typed mode.
-
-Now enough the words let the syntax speak:
-
-[source,lapyst]
-----
-var int i;
-----
-
-This code above declares an variable named `i` of the type integer (`int`).
-Remember `nil`: this variable is now in the "nothing" state!
-
-[source,lapyst]
-----
-i == nil    // this would be `true`
-----
-
-Since we declared `i` now, we can "store" (assign) an integer to it:
-
-[source,lapyst]
-----
-i = 12;
-----
-
-But we cannot store anything else in it:
-
-[source,lapyst]
-----
-// all of the lines below will fail:
-i = "hello";
-i = true;
-i = false;
-i = 12.22;  // 12.22 is an float, so it dosnt fit here because we need an integer.
-----
-
-What we've used here as a type is an so calles native type. They are the most basic form of data and have all a literal to represent them:
-- integer
-- float
-- string
-- boolean
-- regex
-
-For more informations about all native types, their restrictions and more, see builtin types.
-
-Here an full example:
-
-[source,lapyst]
-----
-var int i;
-i = 12;
-
-// tipp: you also can merge the both lines together
-var int j = 12;
-----
-
-[NOTE]
-====
-You might have noticed the simecolons in the examples.
-Let us take a look at the first two lines of the full example:
-
-[source,lapyst]
-----
-var int i;
-i = 12;
-----
-
-The simecolon in the first line tells lapyst: 'Hey this statement is finished, you can process it now!' which in turn then has the result that the variable declaration gets effective.
-
-The same as the second line: only this time its not an statement from the begin of the file, but rather since the last simecolon.
-====
-
-=== Constants
-
-If Variables are one side of the medal, Constants are the other: both of them store data, but variables are variable, meaning we can change what we store in them. Constants on the other hand can only store one single thing, forever.
-
-Because of this behaviour, constantants need an mandatory assignment in the declaration.
-
-[source,lapyst]
-----
-const int a = 12;       // correct
-const int b;            // incorrect, missing initializer
-----
-
-Another thing they that they distinguishes them from variables, is that they dont allow any form of assignment:
-
-[source,lapyst]
-----
-const int a = 12;
-
-a = 13;     // error
-a += 2;     // also an error
-----
-
-=== Typeless
-
-We now know how we declare typed variables and constants, but what about type-less?
-Simple: just dont write the type!
-
-[source,lapyst]
-----
-var a;
-const b = 12;
-----
-
-This will create a type-less variable and/or constant.
-
-[NOTE]
-====
-Type-less constants are possible but they have no benefit over typed constants, since we cannot store anything other than their initial value in them. This means type-less constants are more or less a shortcut for constants so we dosnt need to write the type out.
-====
+// Variables
+ifdef::backend-pdf[]
+include::variables.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Variables
+See link:variables.adoc[here].
+endif::[]
 
 // Functions
 ifdef::backend-pdf[]
