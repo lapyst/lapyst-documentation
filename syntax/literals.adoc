@@ -73,28 +73,93 @@ true    // also known as 'yes' or '1'
 false   // also known as 'no' or '0'
 ----
 
-== Strings
+== Characters and Strings
 
-Lapyst only supports one type of string literal: double-quoted.
-Note: in lapyst all strings are multiline strings.
+A character represents a single letter or character of text and is encased in `'`,
+while strings represent an full text / multiple characters in sequence, and are encased in `"`:
 
 [source,lapyst]
 ----
+'a'
+
 "Hello, world!"
 
 "Good morning, ${name}!" <1>
 ----
 <1> This string uses interpolation, this means at the position of `${name}` the stringified value of the variable `name` is inserted.
 
-Strings also allow for escape characters:
+Characters and strings also allow some special sequences of characters to better represent characters
+that might not be easily typeable.
+
+NOTE: the following examples use them inside a character, but they also can be used the same way in an string!
+
 [source,lapyst]
 ----
-"\n"    // line break
-"\t"    // tabulator
-"\r"    // cariage return
-"\\"    // the character \ but since it's also used to denote escape
+'\n'    // line break
+
+'\t'    // tabulator
+
+'\r'    // cariage return
+
+'\\'    // the character \ but since it's also used to denote escape
         // character we simply use them double to get the character itself.
+
+'\v'    // vertical break
+
+'\a'    // play a bell sound! (only in terminals, and only if they support it)
+
+'\"'    // the character " but since it's also our delimiter for the string itself,
+        // we prefix it with a \ to tell lapyst that we dont want the string to end here
 ----
+
+=== ASCII values
+
+Each character in a string is internally represented by a number. To now find out what this number means we have different "encodings", which are just big tables that say what number should be displayed as what character. One of such is ASCII.
+
+To directly specify ASCII values (the numbers), you can use the escape sequence `\x`:
+
+[source,lapyst]
+----
+'\x41' <1>
+'\x20' <2>
+----
+<1> the letter `A` in ASCII
+<2> an space in ASCII
+
+To use it, you begin the sequence by writing `\x`, immediatly followed by two characters that together form a hexadecimal number. Therefore, the characters that are allowed are restricted to the range of `0` trough `9`, and `a` through `f` (case insensitive).
+
+=== Unicode values
+
+Another encoding is unicode (actually its UTF-8 or UTF-16 but lets keep it simple). Like with ASCII, you also can embedd these values directly into the string by using the `\u` escape sequence:
+
+[source,lapyst]
+----
+'\u0041' <1>
+
+'\u221E' <2>
+
+'\u{1F9C0}' <3>
+----
+<1> ASCII `0x41` (the letter `A`) in unicode
+<2> Mathematical symbol for infinity
+<3> Emoji for a piece of cheese
+
+There are two ways of writing the `\u` sequence:
+
+- followed by 4 characters that together form a hexadecimal number.
+- followed by a `{` which captures any character until the next `}` which together form a hexadecimal number.
+
+Like `\x`, in both forms this means that the range of characters that should be interpret as a number is restricted to the range of `0` trough `9`, and `a` through `f` (case insensitive).
+
+=== Escape sequences and interpolation
+
+It is *not* allowed to construct escape sequences via interpolation, so this isnt working:
+
+[source,lapyst]
+----
+"\u${0x221E}" <1>
+----
+<1> This will cause the compiler to raise an error
 
 == Nil
 
