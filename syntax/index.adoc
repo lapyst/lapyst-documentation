@@ -72,6 +72,15 @@ ifndef::backend-pdf[]
 See link:operators.adoc[here].
 endif::[]
 
+// Units
+ifdef::backend-pdf[]
+include::units.adoc[leveloffset=+1]
+endif::[]
+ifndef::backend-pdf[]
+== Units
+See link:units.adoc[here].
+endif::[]
+
 // Functions
 ifdef::backend-pdf[]
 include::functions.adoc[leveloffset=+1]
@@ -124,15 +133,6 @@ endif::[]
 ifndef::backend-pdf[]
 == Namespaces
 See link:namespaces.adoc[here].
-endif::[]
-
-// Units
-ifdef::backend-pdf[]
-include::units.adoc[leveloffset=+1]
-endif::[]
-ifndef::backend-pdf[]
-== Units
-See link:units.adoc[here].
 endif::[]
 
 // Im/Exporting
