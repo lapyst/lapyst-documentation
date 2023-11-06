@@ -59,8 +59,7 @@ var int j = 12;
 
 [NOTE]
 ====
-You might have noticed the simecolons in the examples.
-Let us take a look at the first two lines of the full example:
+You might have noticed the semicolons in the examples; let's quickly revisit them:
 
 [source,lapyst]
 ----
@@ -68,9 +67,9 @@ var int i;
 i = 12;
 ----
 
-The simecolon in the first line tells lapyst: 'Hey this statement is finished, you can process it now!' which in turn then has the result that the variable declaration gets effective.
+The semicolon in the first line tells lapyst: 'Hey this statement is finished, you can process it now!' which in turn then has the result that the variable declaration gets effective.
 
-The same as the second line: only this time its not an statement from the begin of the file, but rather since the last simecolon.
+The same as the second line: only this time its not an statement from the begin of the file, but rather since the last semicolon.
 ====
 
 == Constants
@@ -85,7 +84,7 @@ const int a = 12;       // correct
 const int b;            // incorrect, missing initializer
 ----
 
-Another thing they that they distinguishes them from variables, is that they dont allow any form of assignment, since that whould be modification:
+Another thing they that they distinguishes them from variables, is that they dont allow any form of reassignment, since that whould be a modification:
 
 [source,lapyst]
 ----
