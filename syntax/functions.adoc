@@ -76,8 +76,8 @@ unit test;
 @no_mangle
 dec int printf(cstr fmt, ...);
 
-def void good_morning(string name)
-    printf("Good morning ${name}!"); <1>
+def void good_morning(cstr name)
+    printf("Good morning %s!", name); <1>
     return;
 end
 
@@ -86,7 +86,7 @@ def void main()
     return;
 end
 ----
-<1> we use string interpolation here to insert the value of the `name` variable into our string
+<1> here, `name` will be given as variadic argument to printf; which replaces the `%s` in our message with the provided argument (the value of `name` here).
 
 With this function we can now call `good_morning("Mai");` to get the text `Good morning Mai!` onto our screen! Sweet! But the truly great is we are not limited to only the string `"Mai"`. We can use any other string you like; thats the power of parameters.
 
