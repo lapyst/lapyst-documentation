@@ -1,0 +1,18 @@
+= Comments
+
+In lapyst, line comments can begin either with `//` or `#` and run until the line ends (LN / `\n`). There are also mutline comments available which starts with `/&#42;` and ends with `&#42;/`:
+
+[source,lapyst]
+----
+// this is a line not processed by the parser
+# this line too
+
+/*
+ And here we have an whole region of the file
+ that's not processed!
+*/
+----
+
+I personaly believe the first thing one should learn in a new language is how to write comments. This can help newcomers to document what code is doing, outcomment code to test things and much much more.
+
+Lapyst also supports doc-comments; a special form of comments where the standard toolset of lapyst searches for more information it then can use for documentational purposes. For more of that see Doc-Comments.
