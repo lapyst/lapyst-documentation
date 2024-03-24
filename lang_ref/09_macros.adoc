@@ -1,0 +1,101 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:lident: link:./lexical_elements#identifiers[identifier]
+:lqident: link:./expressions#QualifiedIdent[QualifiedIdent]
+
+# Macros
+
+toc::[]
+
+## Declaration
+
+[{ebnf-src}]
+----
+MacroDecl = "macro" {lident} "(" link:./declarations#ParameterList[ParameterList] ")" MacroBody "end" ;
+MacroBody = { ( {lident} | TemplateStmt ) ";" } ;
+
+TemplateStmt      = LineTemplateStmt | BlockTemplateStmt ;
+LineTemplateStmt  = "$" TemplateContent ;
+BlockTemplateStmt = "!!" { TemplateContent } "!!" ;
+----
+
+`TemplateContent` is a bit more complex: it essentially is normal lapyst sourcecode but with one addition: everywhere a `TemplateInterpolation` can be placed.
+
+[{ebnf-src}]
+----
+TemplateInterpolation = "{{" {lident} "}}" ;
+----
+
+A `TemplateInterpolation` itself is just used to inject a variable's value inside the template.
+
+[source,lapyst,website=norun]
+----
+macro declare_method(ident name, type ret)
+    $ dec {{ret}} {{name}}();
+end
+
+macro make_method(ident name, type ret, expr value)
+    !!
+        def {{ret}} {{name}}()
+            return {{value}}
+        end
+    !!
+end
+----
+
+## Types
+
+[NOTE.wip]
+TODO: document this
+
+## `@macro_context` annotation
+
+[NOTE.wip]
+TODO: maybe rework this a bit
+
+This annotation can give your macro extra information where the macro itself can be used.
+
+[source,lapyst]
+----
+@macro_context{ in=[ :shape ] }
+macro attr_reader(ident name)
+    type = context.getField(name).getType();
+    !!
+        def {{type}} !{{name}}
+            return self.{{name}}
+        end
+    !!
+end
+----
+
+It's only has the attribute `in` which accepts an array of symbols.
+
+These symbols can be:
+[source,lapyst]
+----
+:shape
+:function
+:method
+:namespace
+:global
+:constructor
+----
+
+## The `context`
+
+[NOTE.wip]
+TODO: expand more on the context
+
+In each macro, the `context` variable holds the context in which the macro is currently being evaluated. With this, you have read access to all definitions / declarations in this context until the point of the macro call.
+
+[source,lapyst]
+----
+@macro_context{ in=[ :shape ] }
+macro attr_reader(ident name)
+    type = context.getField(name).getType(); <1>
+end
+----
+<1> This line querys the current context (a shape) for an specific field. From this field it then retrieves the type of that field.

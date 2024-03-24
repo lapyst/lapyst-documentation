@@ -1,0 +1,148 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:lident: link:./lexical_elements#identifiers[identifier]
+:lqident: link:./expressions#QualifiedIdent[QualifiedIdent]
+
+# Annotations
+
+toc::[]
+
+[{ebnf-src}]
+----
+Annotation = @( "@" {lqident} ) [ "(" AnnotationArgs ")" ]
+AnnotationArgs = {lexpr} { "," {lexpr} } [ "," ]
+----
+
+[NOTE.wip]
+TODO: document this
+
+## Declaration
+
+[NOTE.wip]
+TODO: document this
+
+[source,lapyst]
+----
+@annotation
+shape MyAnnotation
+
+    def MyAnnotation(int i)
+        // ...
+    end
+
+end
+
+@MyAnnotation(12)
+shape MyShape
+end
+----
+
+[NOTE]
+====
+Since annotations are just shapes, that are stored in the type data, you can instantiate them just like normal shapes. To disable this behaviour, you can use multiple approaches:
+
+- Annotate the custom annotation or the constructor(s) with `@not_instantiable`
+- Enable the compiler option `annotation_not_instantiable` for the current file with `{$push annotation_not_instantiable}`
+====
+
+## Builtin annotations
+
+Some annotations are buildin into the compiler:
+
+- `@annotation` to declare a annotation
+- `@not_instantiable` to make a annotation (or constructor of them) not instantiable from normal code via `new`.
+- `@no_mangle` to not apply any name mangeling to a function
+
+[NOTE.wip]
+TODO: document this
+
+## Accessing
+
+[NOTE.wip]
+TODO: document this
+
+## Placement
+
+[NOTE.wip]
+TODO: document this
+
+[{ebnf-src}]
+----
+AnnotatedTopLevelDecl = { Annotation } link:./declarations[TopLevelDecl] ;
+
+AnnotatedStmnt = { Annotation } link:./statements[Statement] ;
+
+AnnotatedType = { Annotation } link:./types#Type[Type] ;
+----
+
+### Declaration Examples
+
+[source,lapyst]
+----
+@namespace_annotation
+namespace Test
+
+    @shape_annotation
+    shape MyTempl
+
+        @field_annotation
+        var int field;
+
+        @method_annotation
+        def method()
+        end
+
+    end
+
+    @variable_annotation
+    var int variable;
+
+    @method_annotation
+    def myFunction(
+        @param_annotation int param1
+    )
+        # ...
+    end
+
+end
+
+@function_annotation
+def someFunction()
+
+    @variable_annotation
+    var int i;
+
+end
+----
+
+### Type examples
+
+[source,lapyst]
+----
+var Car car = new @type_annotation Car();
+
+var @type_annotation int i;
+
+var array[@type_annotation int] a;
+
+shape MyContainer
+    of [ @type_annotation T , @type_annotation int i, @type_annotation const j ]
+    use [ @type_annotation Parent ]
+
+    var @type_annotation int field;
+
+    def (@type_annotation int, @type_annotation int) myFunction()
+    end
+
+end
+
+// type annoation for typeless
+var @type_annotation c;
+
+c = new MyContainer[ @type_annotation int, 12, 1 ]();
+
+f = cast d to @type_annotation F;
+----

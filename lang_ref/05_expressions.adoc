@@ -1,0 +1,418 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:lident: link:./lexical_elements#identifiers[identifier]
+:ltype: link:./types#Type[Type]
+:ltypeargs: link:./types#TypeArgs[TypeArgs]
+:lexpr: <<Expression,Expression>>
+:websiteflags: norun
+
+# Expressions
+
+toc::[]
+
+[NOTE.wip]
+TODO: fit `??` and `??=` into all of this...
+
+[[Operand]]
+## Operands
+
+Operand form the basic values of an expression. This includes literal, a (possibly qualified) identifier denoting a constant, variable or function, or a parenthesized expression.
+
+[{ebnf-src}]
+----
+Operand     = Literal | OperandName [ {ltypeargs} ] | "(" {lexpr} ")" ;
+Literal     = BasicLit | CompositeLit | FunctionLit ;
+BasicLit    = int_lit | float_lit | char_lit | string_lit ;
+OperandName = {lident} | <<QualifiedIdent,QualifiedIdent>> ;
+----
+
+A operand name refering to an generic function may be followed by a list of type arguments to result into an instantiated function, which makes the function callable.
+
+[[QualifiedIdent]]
+## Qualified identifiers
+
+A qualified identifier is a expression that contains the path to a nested identifier, such as a namespaced one.
+
+[{ebnf-src}]
+----
+QualifiedIdent = {lident} { "::" {lident} } ;
+----
+
+[source,lapyst]
+----
+namespace Test
+    namespace Inner
+        var int abc;
+    end
+end
+
+# This is a qualified identifier for
+# the 'abc' identifier in
+# the 'Test::Inner' namespace
+Test::Inner::abc
+----
+
+## Function literals
+
+[NOTE.wip]
+TODO: tinker with this
+
+## Primary, secondary and tertiary expressions
+
+[{ebnf-src}]
+----
+[[PrimaryExpr]]PrimaryExpr = Operand | <<SelfExpr>> | <<NewExpr>> || <<DropExpr>> | <<SuperExpr>> | <<CastExpr>> | <<ArgumentsExpr>> ;
+
+[[SecondaryExpr]]SecondaryExpr = PrimaryExpr | <<MemberExpr>> | <<CallExpr>> | <<IndexExpr>> ;
+
+[[TertiaryExpr]]TertiaryExpr = SecondaryExpr | <<InstanceOfExpr>> ;
+----
+
+[[AssignExpr]]
+## Assignment expressions
+
+Assignments replace the current value stored in a variable, property or field with a new value specified by an expression.
+For this, the left expression needs to be assignable.
+
+[{ebnf-src}]
+----
+AssignExpr = {lexpr} assign_op {lexpr} ;
+
+assign_op = [ add_op | mul_op ] "=" ;
+----
+
+[[MemberExpr]]
+## Member expressions
+
+A member expression is a expression which specifies a member of an composite type. The result depents on the member kind being part of the expression.
+
+[{ebnf-src}]
+----
+MemberExpr = (<<SecondaryExpr>> | <<SuperExpr>>) "." {lident} ;
+----
+
+IMPORTANT: The left hand side must be a expression which value will have a composite type, and the identifier must be declared inside the composite type as a normal, non-static member.
+
+If the expression resolves to:
+
+- A field, the expression is assignable and allows read & writing to the field.
+- A method, the expression's type is a function-type of said method and is therefor callable. The value will be a method reference, which will rember the instance used to create it.
+- A property will result in an newly constructed callable, which provides two overloads for the call operator if the correspoding getter / setter is declared on the property:
+    * One with no arguments and a result type of the property which can be used to call the getter.
+    * A second one with one argument with the type of the property and a void result type which can be used to call the setter.
+
+[[IndexExpr]]
+## Index expressions
+
+A index expression is when the index operator `[]` is used onto a expression that's indexable. It uses one (or more) keys and results into a single value.
+
+[{ebnf-src}]
+----
+IndexExpr    = <<SecondaryExpr,SecondaryExpr>> "[" IndexKeyList [ "," ] "]" ;
+IndexKeyList = {lexpr} { "," {lexpr} } ;
+----
+
+One example would be to retrieve the value of an array or a map:
+
+[source,lapyst]
+----
+var carray[int, 2] a = [ 11, 22 ];
+
+# this expression would be of type int,
+# and would return the value '11'
+a[0]
+----
+
+## Slice expressions
+
+[NOTE.wip]
+TODO: tinker with this first
+
+## Calls
+
+Calls are expressions that call a function or any expression which type is callable.
+
+[{ebnf-src}]
+----
+CallExpr     = <<SecondaryExpr,SecondaryExpr>> "(" ArgumentList [ "," ] ")" ;
+[[ArgumentList]]ArgumentList = {lexpr} { "," {lexpr} } ;
+----
+
+If the expression to call denotes a generic function, it needs to be <<instantiations,instantiated>> first.
+
+### Passing arguments to `+...+` parameters
+
+When calling a variadic function, lapyst groups the arguments greedy from left to right, but makes sure any non-variadic non-default parameter is getting an argument as well.
+
+[source,lapyst]
+----
+def void myFunc( int... numbers, int... other_nums )
+end
+
+myFunc(1, 2, 3, 4) <1>
+
+def void otherFunc( int... numbers, int i )
+end
+
+otherFunc(1, 2, 3, 4) <2>
+----
+<1> This is called with `1, 2, 3, 4` being put into `numbers`, while nothing is given to `other_nums`.
+<2> Here `1, 2, 3, 4` is given to `numbers` while `4` is assigned to `i`.
+
+[[instantiations]]
+## Instantiations
+
+Any generic function or type needs to be instantiated before it can be fully used. Instantiation is the process of substituting type arguments for the type parameters; this is done in two steps:
+
+1. For every type parameter, it's type argument is used as a substitution in the generic *declaration*; this includes the type parameter list itself.
+2. Secondly every type argument needs to satisfy the constraint of the type parameter it is used for. If this is not the case, the instantiation will fail.
+
+When using a generic function, type arguments may be inferred from the context where the function is used in.
+
+[NOTE.wip]
+TODO: elaborate more + explain type inference
+
+## Operators
+
+```
+Expression = UnaryExpr | Expression binary_op Expression ;
+UnaryExpr  = PrimaryExpr | unary_op UnaryExpr ;
+
+binary_op  = "||" | "&&" | rel_op | add_op | mul_op ;
+rel_op     = "==" | "===" | "!=" | "!==" | "<" | "<=" | ">" | ">=" ;
+add_op     = "+" | "-" | "|" | "^" ;
+mul_op     = "*" | "/" | "%" | "<<" | ">>" | "&" ;
+
+unary_op   = "-" | "!" | "~" ;
+```
+
+## Arithmetic operators
+
+[NOTE.wip]
+TODO: document this
+
+```
+Symbol Name           Available on
+  +      sum             integers, floats, complex values, strings
+  -      difference      integers, floats, complex values
+  *      product         integers, floats, complex values
+  **     pow             integers, floats, complex values
+  /      quotient        integers, floats, complex values
+  %      remainder       integers
+
+  &      bitwise AND     integers
+  \|     bitwise OR      integers
+  ^      bitwise XOR     integers
+
+  <<     left shift      integer << integer >= 0
+  >>     right shift     integer >> integer >= 0
+```
+
+### Integer operators
+
+[NOTE.wip]
+TODO: document this
+
+### Integer overflow
+
+[NOTE.wip]
+TODO: document this
+
+### String concatenation
+
+[NOTE.wip]
+TODO: document this
+
+## Comparison operators
+
+```
+==  equal
+!=  not equal
+
+=== type equal
+!== not type equal
+
+<   less
+<=  less or equal
+>   greater
+>=  greater or equal
+```
+
+[NOTE.wip]
+TODO: document this
+
+## Logical operators
+
+[NOTE.wip]
+TODO: document this
+
+```
+&&      conditional AND     p && q  is "if p then q else false"
+||      conditional OR      p || q  is "if p then true else q"
+!       NOT                 !p      is "not p"
+```
+
+[[CastExpr]]
+## Casting
+
+"Cast" expressions try to change one value from a specific type into another one that is specified. What exactly is being done to convert or "cast" the value to the desired type is based on both the type to be converted, and the type it should be converted into.
+
+[{ebnf-src}]
+----
+CastExpr = "cast" {lexpr} "to" {ltype} ;
+----
+
+The rules for conversion are:
+
+- A integer type as input can be cast to any integer type that is bigger in size; they also can always be converted between the signed and unsigned variants as long as both types are the same size, or the target integer type is bigger.
+- Integer and Character types as input can be cast to each other; i.e. integer to char and char to integer. They only can however be converted as long as the target type has the same byte-size.
+- Complex types:
+    * A input shape type can:
+        ** be casted to a role to create a role instance if the shape source implements the role
+
+[NOTE.wip]
+TODO: more rules!
+
+[[SelfExpr]]
+## Self expressions
+
+The "self" expression is refering to the current instance when inside a link:./types#_structured_types[structured types] methods or properties.
+
+[{ebnf-src}]
+----
+SelfExpr = "self" ;
+----
+
+[[SuperExpr]]
+## Super expressions
+
+The "super" expression is refering to the parents of the current link:./types#shape_type[shape types].
+
+If no specification is added, lapyst tries to automatically resolve which parent type is ment. If this fails however, an error is generated.
+
+When on the other hand a specification is added, it can either be:
+
+- the name of the parent type. If this is the case, everything is resolved against that particular parent.
+- a single `*`. This is called a "wildcard spec", and will expand the expression to all parents in the order they're declared. If one of the expanded expressions is not valid, the affected ones are silently discarded.
+
+[{ebnf-src}]
+----
+SuperExpr = "super" [ "<" ( "*" | <<QualifiedIdent>> ) ">" ]
+----
+
+[source,lapyst]
+----
+super();
+super<A>();
+super<*>();
+
+super.i = 0;
+super<A>.i = 0;
+super<*>.i = 0;
+
+super.method();
+super<A>.method();
+super<*>.method();
+----
+
+[[InstanceOfExpr]]
+## InstanceOf expressions
+
+The "instanceof" expression checks if a expression's type is a instance of a specifc complex type.
+
+[{ebnf-src}]
+----
+InstanceOfExpr = <<TertiaryExpr,TertiaryExpr>> "instanceof" {ltype} ;
+----
+
+When the expression is:
+- a shape, and the type is
+    * a role, then true is returned when the shape implements the role.
+    * a shape, then true is returned when the expression's shape is extending the given shape.
+- a role instance, and the type is
+    * a role, then true is returned when the complex type backing the role instance implements the role.
+    * a shape, then true is returned when the complex type backing the role instance is also a shape and is extending the given shape.
+
+Returns false in any other case.
+
+[[NewExpr]]
+## New expressions
+
+[NOTE.wip]
+TODO: document this
+
+[{ebnf-src}]
+----
+NewExpr = "new" <<QualifiedIdent>> "(" <<ArgumentList>> [ "," ] ")" ;
+----
+
+[[DropExpr]]
+## Drop expressions
+
+[NOTE.wip]
+TODO: document this
+
+[{ebnf-src}]
+----
+DropExpr = "drop" {lident} [ "," <<ArgumentList>> ] ;
+----
+
+[[ArgumentsExpr]]
+## Arguments
+
+[{ebnf-src}]
+----
+ArgumentsExpr = "arguments" ;
+----
+
+It's a special variable-like keyword that behaves like an array of type `any` with wich you can get all parameters of the current function via their index, starting at 0.
+
+[[TernaryExpr]]
+## Ternary expressions
+
+[NOTE.wip]
+TODO: might get replaced with `if`-expressions
+
+[{ebnf-src}]
+----
+TernaryExpr = AssignExpr "?" AssignExpr ":" AssignExpr | AssignExpr ;
+----
+
+## Constant expressions
+
+[NOTE.wip]
+TODO: document this
+
+## Expression precedence
+
+Precedence of operators and expressions is ordered as follows, from strong (top-most) to weak.
+
+[%header,cols="4,1"]
+|===
+| Operator / Expression | Associativity
+| <<PrimaryExpr,Primary expressions>> | -
+| <<SecondaryExpr,Function calls, array indexing / Secondary expressions>> | -
+| <<TernaryExpr,`instanceof` / Ternary expressions>> | -
+| Unary `-` `!` `~` | -
+| `\*` `**` `/` `%` | left to right
+| `+` `-` | left to right
+| `<<` `>>` | left to right
+| `&` | left to right
+| `\|` `^` | left to right
+| `<` `>` `\<=` `>=` | left to right
+| `==` `===` `!=` `!==` | left to right
+| `&&` | left to right
+| `\|\|` | left to right
+| `=` `+=` `-=` `/=` `\*=` `**=` `%=` `&&=` `\|\|=` `&=` `\|=` `<\<=` `>>=` `^=` | right to left
+| <<TernaryExpr,Ternary expressions>> | -
+|===
+
+NOTE: Binary operators in the same precedence level associate from left to right, i.e. `a / b * c` is the same as `(a / b) * c`.
+
+## Order of evaluation
+
+[NOTE.wip]
+TODO: document this

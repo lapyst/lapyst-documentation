@@ -1,0 +1,315 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:lexpr: link:./expressions#expressions[Expression]
+:lblock: <<blocks,Block>>
+:lident: link:./lexical_elements#identifiers[identifier]
+:lqident: link:./expressions#QualifiedIdent[QualifiedIdent]
+:ltype: link:./types#Type[Type]
+:websiteflags: norun
+
+# Statements
+
+toc::[]
+
+Statements control execution of a program.
+
+[{ebnf-src}]
+----
+Statement =
+    link:./declarations[Declaration] | SimpleStmt |
+    <<BreakStmt>> | <<ForStmt>> | <<IfStmt>> | <<NextStmt>> | <<RedoStmt>> |
+    <<RetryStmt>> | <<ReturnStmt>> | <<SwitchStmt>> | <<ThrowStmt>> |
+    <<TryStmt>> | <<UnlessStmt>> | <<WhileStmt>> ;
+
+SimpleStmt = <<EmptyStmt>> | <<ExpressionStmt>> ;
+----
+
+[[blocks]]
+## Blocks
+
+A block is a series of statements.
+
+[{ebnf-src}]
+----
+Block = StatementList ;
+StatementList = { <<Statement>> ";" } ;
+----
+
+[[EmptyStmt]]
+## Empty statements
+
+A statement that does nothing pretty much
+
+[{ebnf-src}]
+----
+EmptyStmt = ;
+----
+
+[[ExpressionStmt]]
+## Expression statements
+
+[{ebnf-src}]
+----
+ExpressionStmt = {lexpr} ;
+----
+
+[[BreakStmt]]
+## Break statements
+
+Using a "break" statement terminates execution of the innermost "for", "while" or "switch" statement within the current function. Because of that, it is illegal to use "break" outside of those statements.
+
+[{ebnf-src}]
+----
+BreakStmt = "break" ;
+----
+
+[[ForStmt]]
+## For statements
+
+A "for" statement specifies a repeated execution of a set of statements. There are two forms this statement can take: a numerical based or a enumerated one.
+
+[{ebnf-src}]
+----
+ForStmt = "for" [ NumericForClause | EnumeratedForClause ] "do" {lblock} "end" ;
+----
+
+### For statements with a numeric clause
+
+A "for" statement with a NumericForClause is controlled by a variable, thats only visible to the block the "for" statement is using as a body. It has a starting value as well as a end value. It increments this variable's value by using the "+" operator and the stepsize if any is specified. If none is given, "1" is used instead.
+
+[{ebnf-src}]
+----
+NumericForClause = [ {ltype} ] {lident} "in" StartValue "to" StartValue [ "step" StepSize ] ;
+StartValue       = {lexpr} ;
+EndValue         = {lexpr} ;
+StepSize         = {lexpr} ;
+----
+
+[source,lapyst]
+----
+for i in 1 to 10 do
+    f(i);
+end
+
+for i in 0 to 10 step 2 do
+    f(i);
+end
+----
+
+NOTE: The endvalue is *inclusive*, which means in the example above, the loop with "1 to 10" would always also execute the body with "i=10".
+
+### For statements with a enumerated clause
+
+The EnumeratedForClause "for" variant iterates over an type which is Enumerable.
+
+[{ebnf-src}]
+----
+EnumeratedForClause = IterationVariables "in" Enumerable ;
+IterationVariables  = [ {ltype} ] {lident} { "," [ {ltype} ] {lident} } [ "," ] ;
+Enumerable          = {lexpr} ;
+----
+
+[NOTE.wip]
+TODO: specify what an enumerable type exactly is.
+
+[[IfStmt]]
+## If statements
+
+"If" statements can be used to conditionally execute of a set of branches according to the value of one or more boolean expressions.
+
+If the first expression evaluates to true, the "then" branch is executed. Otherwise any present "elsif" expression is evaluated in order, if any evaluates to true, the corresbonding branch is executed and no other "elsif" is checked. If none of the "elsif" expressions evaluated to true, the "else" branch is executed.
+
+[{ebnf-src}]
+----
+IfStmt = "if" {lexpr} "then" {lblock} { "elsif" {lexpr} "then" {lblock} } [ "else" {lblock} ] "end" ;
+----
+
+[source,lapyst]
+----
+if x > max then
+    x = max
+end
+----
+
+The "elsif" keyword is equivalent to using an single "if" inside an "else" branch:
+
+[source,lapyst]
+----
+if a then
+    return 1;
+elsif b then
+    return 2;
+else
+    return 3;
+end
+
+# The if below is functionally equivalent to the one above
+if a then
+    return 1;
+else
+    if b then
+        return 2;
+    else
+        return 3;
+    end
+end
+----
+
+[[NextStmt]]
+## Next statements
+
+A "next" statement starts the next iteration of the innermost "for" or "while" loop by advancing control to the end of the loop block. The "for" or "while" loop must be inside the same function as the "next" statement.
+
+[{ebnf-src}]
+----
+NextStmt = "next" ;
+----
+
+[[RedoStmt]]
+## Redo statements
+
+"Redo" statements can restart the current iteration of the innermost "for" loop by reseting control to the start of the loop block, without advancing the iteration variable. The "for" loop must be inside the same function as the "redo" statement.
+
+[{ebnf-src}]
+----
+RedoStmt = "redo" ;
+----
+
+[[RetryStmt]]
+## Retry statements
+
+A "retry" statement can be used inside the innermost "catch" block to move control back to the start of the corresponding "try" block for the "catch" block. The "try" and "catch" blocks must be inside the same function as the "retry" statement.
+
+[{ebnf-src}]
+----
+RetryStmt = "retry" ;
+----
+
+[[ReturnStmt]]
+## Return statements
+
+When using a "return" statement inside a Function, it terminates the execution of said function and optionally provides a return value.
+
+[{ebnf-src}]
+----
+ReturnStmt = "return" [ {lexpr} ] ;
+----
+
+When a function does not specify a result type by using "void", a "return" statement must not specify any result values.
+
+[source,lapyst]
+----
+def void noResult()
+    return;
+end
+----
+
+Otherwise, it needs to list the value to be returned. The expression must be assignable to the specified result type.
+
+[source,lapyst]
+----
+def int simpleF()
+    return 42;
+end
+----
+
+[[SwitchStmt]]
+## Switch statements
+
+"Switch" statements provide multi-way execution. An expression is compared to the "cases" inside the "switch" to determine the branch to execute.
+
+The switch expression is evaluated and the case expressions are evaluated left-to-right and top-to-bottom. The first case that equals (using the "==" operator) triggers execution of the statements of the associated case, while the other cases are skipped. If none of the cases matches, the optional "default" case is used and its statements are executed instead. There can only be one default case, if any and can appear anywhere bewteen the other regular cases.
+
+[{ebnf-src}]
+----
+SwitchStmt = "switch" {lexpr} "do" { CaseClause } "end" ;
+CaseClause = SwitchCase ":" {lblock} ;
+SwitchCase = "case" {lexpr} | "default" ;
+----
+
+[NOTE.wip]
+TODO: this statement is under an active redesign in combination with pattern-matching.
+
+[[ThrowStmt]]
+## Throw statements
+
+A "throw" statements can be used anywhere inside a function and immediately terminates the current function without setting any result values. The supplied exception value is used to search any matching "catch" clause of a "try" block while traversing up the callstack.
+
+IMPORTANT: if no such "catch" clause could be found and the entrypoint of a program is reached, the program is terminated and the exception is printed out.
+
+[{ebnf-src}]
+----
+ThrowStmt = "throw" {lexpr} ;
+----
+
+[[TryStmt]]
+## Try statements
+
+"Try" statements start a block of code to which any number (including zero) of "catch" clauses can be attached, which will be used in the event the "try" block "throws" an exception.
+
+In any event, which means either the "try" block is completly executed without a "throw", or any "catch" clause's block was executed due to a "throw", the "ensure" block is executed, even if the "try" or "catch" block have terminated the current function.
+
+[{ebnf-src}]
+----
+TryStmt = "try" {lblock} { "catch" "(" {lexpr} ")" {lblock} } [ "ensure" {lblock} ] "end" ;
+----
+
+[[UnlessStmt]]
+## Unless statements
+
+A "unless" statement is a special form of a "if" statement, but it only executes the "then" branch if the condition evaluates to false. Otherwise the "else" branch is executed. In contrast to the "if" statement, there are no "elsif" or a equivalent to them in a "unless" statement.
+
+[{ebnf-src}]
+----
+UnlessStmt = "unless" {lexpr} "then" {lblock} [ "else" {lblock} ] "end" ;
+----
+
+[source,lapyst]
+----
+unless isEmergency then
+    do_nothing();
+else
+    handle_emergency();
+end
+----
+
+[[WhileStmt]]
+## While statements
+
+A "while" statement is a loop that only executes it's block when it's condition evaluates to a boolean true. Therefore it is illegal to have a expression as condition that is NOT of a boolean type. There are two forms of a while loop: the head controlled while, and the tail controlled while.
+
+[{ebnf-src}]
+----
+WhileStmt = HeadControlledWhile | TailControlledWhile ;
+----
+
+### Head controlled while
+
+The head controlled "while", first evaluates the condition and then executed the block if said condition evaluates to true. Therefore it is possible that the block is never executed a single iteration if the condition evaluates to false on the first iteration.
+
+[{ebnf-src}]
+----
+HeadControlledWhile = "while" {lexpr} "do" {lblock} "end" ;
+----
+
+### Tail controlled while
+
+A tail controlled "while" first executes the block and then only moves controll back to the start of the block if the condition evaluates to true. This behaviour leads to the block being always executed atleast once, even if the condition evaluates to false on the first iteration.
+
+[{ebnf-src}]
+----
+TailControlledWhile = "do" {lblock} "while" {lexpr} ;
+----
+
+[[IncludeStmt]]
+## Include statements
+
+A "include" statement includes a `module` into the current context. It is allowed only in certain places such as inside link:./declarations#_structured_types[structured types].
+
+[{ebnf-src}]
+----
+IncludeStmt = "include" {lqident} ;
+----

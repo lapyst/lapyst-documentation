@@ -1,0 +1,65 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:lident: link:./lexical_elements#identifiers[identifier]
+:lqident: link:./expressions#QualifiedIdent[QualifiedIdent]
+
+# Units
+
+toc::[]
+
+## Source file organization
+
+Each unit, needs to be placed at a location according to their name to properly being found by lapyst for imports:
+
+- Using the while name as the folder-path and looking for a `unit.lp`: `MyLib::Folder::Utils` will become `MyLib\Folder\Utils\unit.lp`.
+- Using the last part as the filename and all parts before it as the folder-path: `MyLib::Folder::Utils` will become `MyLib\Folder\Utils.lp`.
+
+Folders to look for units are called "import paths", and can be configured. For more information on how to do that, see the compiler's documentation.
+
+## Unit clause
+
+A unit clause needs to be present at the beginning of each source file, only comments being allowed before it.
+
+[{ebnf-src}]
+----
+UnitClause = "unit" UnitName ;
+UnitName   = {lqident} ;
+----
+
+## Import declarations
+
+A import declaration is used to import declarations from other units to be available in the current unit.
+
+[{ebnf-src}]
+----
+ImportDecl    = "import" [ ImportUse "from" ] ImportName [ ImportAsDecl ] ;
+
+ImportUse     = {lqident} | ImportUseList ;
+ImportUseList = "[" { {lqident} "," } {lqident} "]" ;
+
+ImportAsDecl  = "as" {lident} ;
+----
+
+- When no "use" definition is given, and no "as" part is specified, all symbols of the specified unit are imported to the current unit's top-level.
+- When a "use" specification is given, only the specified symbol(s) are made available.
+- When a "as" part is given, all imported symbols are wrapped in a namespace with the specified name.
+
+## Export declarations
+
+A export declaration specifies which symbols of a unit should be visible to other units through importing.
+
+[{ebnf-src}]
+----
+ExportDecl    = "export" ExportUse [ ExportAsDecl ] ;
+
+ExportUse     = {lqident} | ExportUseList ;
+ExportUseList = "[" { {lqident} "," } {lqident} "]" ;
+
+ExportAsDecl  = "as" {lident} ;
+----
+
+- The "use" part can either be a single symbol or a list of symbols.
+- When a "as" part is given, all given symbols in the "use" part are wrapped in a namespace with the specified name.

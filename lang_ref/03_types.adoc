@@ -1,0 +1,315 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:toclevels: 3
+:websiteflags: norun
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:lident: link:./lexical_elements#identifiers[identifier]
+:lexpr: link:./expressions#expressions[Expression]
+
+# Types
+
+toc::[]
+
+Types are used to group together a set of values under a name and optionaly specify operations and methods specific to those values.
+
+[{ebnf-src}]
+----
+Type        = @( TypeName [ TypeArgs ] { "*" } );
+[[TypeName]]TypeName    = {lident} ;
+[[TypeArgs]]TypeArgs    = "[" TypeArgList [ "," ] "]" ;
+TypeArgList = TypeArg { "," TypeArg } ;
+TypeArg     = Type | {lexpr} ;
+----
+
+## Integer types
+
+The default value of all integers, signed and unsigned, is `0`.
+Literal integers are the type where they fit in best. Means a literal `12` will be `int8`.
+
+[%header,cols="1,1,1,1,3"]
+|===
+| type | alias | signed? | size | range
+| `int8`  | `byte`  | signed   | 8 bit / 1 byte | -128 to 127
+| `uint8` | `ubyte` | unsigned | 8 bit / 1 byte | 0 to 255
+
+| `int16`  | `short`  | signed   | 16 bit / 2 bytes | -32,768 to 32,767
+| `uint16` | `ushort` | unsigned | 16 bit / 2 bytes | 0 to 65,535
+
+| `int32`  | `int`  | signed   | 32 bit / 4 bytes | -2,147,483,648 to 2,147,483,647
+| `uint32` | `uint` | unsigned | 32 bit / 4 bytes | 0 to 4,294,967,295
+
+| `int64`  | `long`  | signed   | 64 bit / 8 bytes | -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+| `uint64` | `ulong` | unsigned | 64 bit / 8 bytes | 0 to 18,446,744,073,709,551,615
+|===
+
+## Floating-point types
+
+The default value of all floats is `0.0`.
+
+[%header,cols="1,1,1,1,2,1"]
+|===
+| type | alias | suffix | size | range | precision
+| `f32` | `float` | `f` / `F` | 32 bit / 4 bytes | 1.2E-38 to 3.4E+38 | 6 decimal places
+| `f64` | `double` | `d` / `D` | 64 bit / 8 bytes | 2.3E-308 to 1.7E+308 | 15 decimal places
+|===
+
+## Boolean type
+
+Booleans (`true` / `false`) are of type `bool`, which in hardware is 1 bit wide.
+
+The default value of all booleans is `false`.
+
+Encoding:
+
+- `true` becomes `1`
+- `false` becomes `0`
+
+## Character types
+
+|===
+| type     | alias   | size
+| `char8`  | `char`  | 8 bit / 1 byte
+| `char16` | `wchar` | 16 bit / 2 bytes
+| `char32` | `dchar` | 32 bit / 4 bytes
+|===
+
+Characters can be converted back and forth between their integer counterparts. This needs to always be explicitly done via casting:
+
+[source,lapyst]
+----
+var int8 i = 'a'; // invalid, produces error
+
+var int8 i = cast 'a' to int8; // correct way
+----
+
+Therefore, the default value of characters is always the numerical value `0`.
+
+## String types
+
+There are two core lapyst types for strings:
+
+- `cstr` which encode the string as a null-terminated string. It's use is intended for interfacing with C code.
+- `str` which is a length prefixed string with a 64bit wide size (using the `uint64` type).
+
+Length of strings can be discovered by using the `len` property: `s.len`.
+
+Strings can be accessed by integer indices from 0 to `s.len-1`.
+
+[NOTE.wip]
+TODO: maybe make it illegal to take the address of an element
+
+## Array types
+
+An array is a numbered sequence of elements of a single type, which is called the element type.
+Most array types are found in the standard library, with one exception: `carray`.
+
+The `carray` type is an array where the entire array is placed linear in memory and is used to interface with C code.
+
+[source,lapyst]
+----
+// array of int's with an unspecified size
+var carray[int] a;
+
+// array of int's with exactly 4 elements, indexed 0 - 3
+var carray[int, 4] a;
+----
+
+There are two variants as shown above:
+
+- one with an unspecified length; by default it's default value is `nil`, and they typically need to be created at runtime via i.e. `new carray[int](size)`. Their size cannot be discovered from the `carray` alone and thus must be tracked seperatly.
+
+- the other one has a fixed length known at compiletime. Their default value is an array with the default value of it's element type. Additionally, those are **not** allowed to be created via a `new` expression. The size of these can be discovered by using the `.len` member.
+
+`carray`'s can be accessed by integer indices from 0 to `len(a)-1`.
+
+## Slice types
+
+[NOTE.wip]
+TODO: tinker how slices should work
+
+## User defined types
+
+User defined types are declared in-code via some of the declarations found in link:./declarations[the declarations Chapter]. Identified are all via a user-given name / identifier, which is also how they are refered to.
+
+## Pointer types
+
+[NOTE.wip]
+TODO: play around how pointers should work and if references should be added too
+
+## Function types
+
+[NOTE.wip]
+TODO: tinker around some more
+
+## Map / Hash types
+
+[NOTE.wip]
+TODO: tinker at this too
+
+## Composite types
+
+Composite types are types that are composited from other types and declarations.
+
+[[structured_types]]
+### Structured types
+
+Structured types hold their content in a structured way. They all support some common features, but also have all a unique property makeing them distinct.
+
+To refer to the current instance, you can use the link:./expressions#SelfExpr[`self` expression].
+
+[[visibility]]
+#### Visibility
+
+All members inside a structured type can be assigned a visibility, which helps deciding if any piece of code is actually allowed to access the member. There are three levels:
+
+1. private, this is the default of any member and is the only one NOT needing any special symbol. When a member is private only code inside the structured type itself is allowed access to said member.
+2. public, which is denoted by a `!`, and members with it can be accessed by *any* code.
+3. protected, which is denoted by one or more subsequent `*` **without** any space or other characters inbetween them. This level:
+    - disallows access to members from any code outside of the instance like private, but
+    - allows access of any child shapes up to the count of `*` from the current instance away
+
+[source,lapyst]
+----
+shape A
+    var int a;
+    var int !b;
+    var int *c;
+
+    # can use all three fields
+end
+
+shape B use [ A ]
+    # can only access b and c, because it is one shape away of A (B -> A)
+end
+
+shape C use [ B ]
+    # can only access b; cannot access c because it is two shape's away from A (C -> B -> A)
+end
+
+# can access only field b
+----
+
+[[fields]]
+#### Fields
+
+A field is a variable normally bound to the instance of the structured type. But if they're `static`, they are globals that just accessible via the structured type just like a namespace.
+
+They're declared by a link:./declarations#FieldDecl[field declaration].
+
+[[methods]]
+#### Methods
+
+A method is a function, normally bound to the instance of the structured type, and thus being able to access all of the fields on the current instance. But if they're `static`, they are functions that just accessible via the structured type just like a namespace, and thus **cannot** use `self`.
+
+They're declared by a link:./declarations#Method[method declaration].
+
+[[properties]]
+#### Properties
+
+A property is a special form of member. It is accessed from the outside like an field, but is actually composed by up to two methods: a getter and a setter. You only need atleast one of them for the property to be valid.
+
+Just like methods and fields, they too can be `static` and have the same limitiations like methods and **cannot** use `self`.
+
+TIP: Properties make a great way to create read-only fields by only implementing a getter but no setter.
+
+They're declared by a link:./declarations#Property[property declaration].
+
+[[constructors]]
+#### Constructors
+
+A constructor is a special member method, which uses the `self` keyword instead of a name. It's purpose is to initialize the instance when constructing said instance.
+
+Note that constructors have some rules:
+
+- The initializers of fields are run before the constructor
+- Constructors of parents are run before the constructor in the order they're declared, unless the constructor contains an explicit call to them via `super()`. It is an error to not call all parent constructors.
+
+They're declared by a link:./declarations#Constructor[constructor declaration].
+
+##### Named constructors
+
+It is also possible to declare named constructors; they're distinguisched by having a `::` and a identifier behind the `self`. This is also what you need when you call them via a link:./expressions#NewExpr[`new` expression].
+
+[[destructors]]
+#### Destructors
+
+A destructor is also a special member method, that uses `~self` instead of a name. The purpose of destructors is the opposite of <<constructors>>; they're called once the instance is destructed / free'd from memory. When this happens depends on a number of factors. See below for more informations on that.
+
+Like constructors, destructors have some rules: destructors of fields are run after the destructor itself. After that the destructor of all parent types are called, in the order the parents are declared. A destructor is **not** allowed to call the parent destructor themself via `super()`.
+
+It is valid in some cases to both declare a return type aswell as parameters for a destructors. See below for more information on that.
+
+They're declared by a link:./declarations#Destructor[destructor declaration].
+
+##### Variants
+
+- If a instance is explicitly dropped, a destructor with parameters and return value can be called. See link:./expressions#DropExpr[drop expression].
+
+[NOTE.wip]
+TODO: expand on this
+
+[[shape_types]]
+### Shape types
+
+A shape is a <<structured_types,structured type>> which hold both data and code in form of member functions also called "methods". If you're already familiar with other programming languages, shapes are your classic classes. They're declared by a link:./declarations#ShapeDecl[shape declaration].
+
+[[shape_inheritance]]
+#### Inheritance
+
+Inheritance is a technique to compose more complex types by specifing one or more "parents" which are used as a base, which the current shape declaration extends by adding additional members.
+
+IMPORTANT: Parent types must be also be shapes, and the same shape can only be named once as a parent, so you cant inherit twice or more from the same shape.
+
+Inheritance brings you neat benefits: it allows for the sub or "child" type to be accepted everywhere where the super or "parent" type is. We call this down casting.
+
+You also can access the same fields and methods on the child type as on the parent type.
+
+Theres one more additional benefit: overwriting methods. Overwriting a method means that you declare a new method on the child type which signature is exactly the same as the one in the parent, and it gets called instead when you call the method, even when you downcast a shape.
+
+[[enum_types]]
+### Enum types
+
+[NOTE.wip]
+TODO: tinker at this
+
+[[role_types]]
+### Role types
+
+A role is a specification what a composite type should look like for an outsider. They contain a set of method declarations including their signature.
+
+When wanting to assign a composite type to a role type, it needs to implement all the specifications present in the role, which is a compiletime check. Only if this check passes, the assignment is valid. Elsewhere it would be an error.
+
+[source,lapyst,website=norun]
+----
+role Animal
+    dec string say();
+end
+
+shape Cat
+    def string say()
+        return "meow!";
+    end
+end
+
+shape SemiTruck
+    def int trailers()
+        return 1;
+    end
+end
+
+var Cat c = new Cat();
+var SemiTruck t = new SemiTruck();
+
+var Animal a1 = c; # valid, Cat implements the method `say` which returns a `string`
+var Animal a2 = t; # invalid, SemiTruck does not implement the `say` method
+----
+
+Due to this behaviour, it is very easy to implement an "any" type:
+
+[source,lapyst,website=norun]
+----
+role any
+end
+----

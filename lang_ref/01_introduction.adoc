@@ -1,0 +1,77 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+
+# Introduction
+
+toc::[]
+
+## Notation
+
+This documentation uses a variant of EBNF to specify the syntax of the lapyst language.
+
+[source,ebnf]
+----
+Syntax     = { Production } ;
+Production = production_name "=" [ Expression ] ";" ;
+Expression = Term { "|" Term } ;
+Term       = Factor { Factor } ;
+Factor     = production_name | token [ "…" token ] | Join | Group | Option | Repetition ;
+Group      = "(" Expression ")" ;
+Option     = "[" Expression "]" ;
+Repetition = "{" Expression "}" ;
+----
+
+Following operators are used:
+
+[source]
+----
+|   alternation
+()  grouping
+[]  option (0 or 1 times)
+{}  repetition (0 to n times)
+----
+
+Normaly, whitespaces and comments are skipped inbetween tokens or rules:
+
+[source,ebnf]
+----
+whitespace = " " | "\t" | "\v" | "\r" | "\n" ;
+comments = line_comment | block_comment ;
+line_comment = (("//") | "#") { /* any codepoint except newline (U+000A) */ } newline ;
+block_comment = "/*" { /* any codepoint, not greedy */ } "*/" ;
+----
+
+However, a `@` can be placed in front of a grouping expression like so: `@( ... )`. This makes the group atomic, meaning no automatic whitespace or comment skipping occours inside this group. Groups and rules used inside however can skip whitespaces implicitly again, so it is necessary to mark everything that should not skip whitespaces explicitly.
+
+Note: Tokens-rules are all rules that have a lowercase name and are atomic by default. They are all documented in the link:./lexical_elements[Lexical Elements] section. All other rules (typically starting with an uppercase letter) are normal production rules and **are not** atomic by default and have comments & whitespaces automatically skipped unless a atomic group is used inside them.
+
+## Source Code representation
+
+Source code files are encoded in UTF-8. Due to the fact that UTF-8 is compatible with ASCII you also can use plain ASCII files, as long as it only uses characters that are indeed compatible to UTF-8.
+
+Additionaly, the text is **not** canonicalized, meaning a accented codepoint is not read the same as the same character when constructed by combining an accent and a letter.
+
+[[characters]]
+### Characters
+
+```
+newline        = /* codepoint U+000A */ ;
+unicode_char   = /* any codepoint except newline */ ;
+unicode_letter = /* codepoint which category is "Letter" */ ;
+unicode_digit  = /* codepoint which category is "Number, decimal digit" */ ;
+```
+
+For the exact definition for the categories, see https://www.unicode.org/versions/Unicode8.0.0/[The Unicode Standard 8.0], Section 4.5 "General Category". The unicode categories Lu, Ll, Lt, Lm and Lo are all considered "Letters", while the Nd category is considered "Digits" here.
+
+[[letters_and_digits]]
+### Letters and Digits
+
+```
+letter    = unicode_letter | "_" ;
+dec_digit = "0" … "9" ;
+bin_digit = "0" | "1" ;
+oct_digit = "0" … "7" ;
+hex_digit = "0" … "9" | "A" … "F" | "a" … "f" ;
+```

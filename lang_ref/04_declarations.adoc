@@ -1,0 +1,331 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:lident: link:./lexical_elements#identifiers[identifier]
+:ltype: link:./types#Type[Type]
+:lexpr: link:./expressions#expressions[Expression]
+:lblock: link:./statements#blocks[Block]
+:websiteflags: norun
+
+# Declarations and scope
+
+toc::[]
+
+[{ebnf-src}]
+----
+Declaration   = <<ConstDecl>> | <<VarDecl>> ;
+[[TopLevelDecl]]TopLevelDecl  = Declaration | <<Functions>> | <<ShapeDecl>> | <<RoleDecl>> | <<EnumDecl>> | <<NamespaceDecl>> ;
+----
+
+The *scope* of any declared identifier is the range of sourcecode in which the identifier refers to the declaration of it.
+
+Following scopes exists:
+
+1. For <<predeclared_identifiers>> this is every sourcecode there is.
+2. For any declaration inside a link:./units[Unit] this is the unit itself.
+3. For any declaration inside a <<NamespaceDecl,Namespace>> this is the namespace.
+4. For any <<ParameterList,parameter declaration>> this is the function body (if it exists).
+5. For any type parameter declaration this is the range of the entity the parameter is declared for.
+6. For any declaration inside a shape, enum or role, this is the entire entity declared.
+7. For any constant or variable identifier declared inside a function, it begins at the end of the constant or variable declaration and ends at the end of the innermost block containing said declaration.
+
+[[predeclared_identifiers]]
+## Predeclared identifiers
+
+Some identifiers cannot be used, due to them being pre-declared. These are mainly builtin types, constant values and ofcourse all keywords.
+
+```
+Types:
+    int8 int16 int32 int64
+    byte short int long
+    uint8 uint16 uint32 uint64
+    ubyte ushort ulint ulong
+    char8 char16 char32
+    char wchar dchar
+    void bool
+    cstr carray
+
+Constants:
+    true false nil
+```
+
+## Uniqueness of identifiers
+
+A identifier is called *unique* if it is *different* from every other in a set of identifiers. Two identifiers differ when:
+
+- they are spelled differently or
+- appear in different link:./units[units] and/or <<NamespaceDecl,namespaces>>
+
+Otherwise, they are the same. Using the same identifier inside two different declarations is considered invalid code and results into a error at compile time.
+
+[[ConstDecl]]
+## Constant declarations
+
+A constant declaration binds a constant value to an identifier to reference the same constant value via a more human-readable name. The expression can be any expression which results into a constant value, which means that it cannot change regardless of any state or other value inside the program.
+
+[{ebnf-src}]
+----
+ConstDecl = "const" {ltype} {lident} "=" {lexpr} ";" ;
+----
+
+A general rule of thumb is that any literal value and their operations can be used. Any other value, like instances of user-defined types or values that are the result of a function call, are implementation dependent, and are ONLY allowed if the type-construction / functions have no side effects and are pure.
+
+IMPORTANT: The reference compiler `lapystc` currently does not allow any user-defined types or function calls inside values for constants.
+
+[[VarDecl]]
+## Variable declarations
+
+A variable declaration creates a variable, bounds a identifier to it as it's name and gives it a type and a initial value.
+
+[{ebnf-src}]
+----
+VarDecl = "var" {ltype} {lident} [ "=" {lexpr} ] ";" ;
+----
+
+[[Functions]]
+## Functions
+
+Functions in lapyst can either be declared or defined.
+
+[{ebnf-src}]
+----
+Functions = <<FunctionDecl>> | <<FunctionDef>> ;
+----
+
+[[FunctionDecl]]
+### Function declaration
+
+A function declaration is when we declare the name of a function, as well as it's result & parameter types. This function contains no code and is only used to tell lapyst that a particular function exists.
+
+[{ebnf-src}]
+----
+FunctionDecl = "dec" {ltype} {lident} "(" <<ParameterList>> ")" ;
+----
+
+NOTE: This feature is often used with lapyst's feature of integrating other languages.
+
+[[FunctionDef]]
+### Function definition
+
+Similar to a function declaration, a function definition also declares the name of a function and result + parameter types, but it also defines the code that the function contains & will be executed on calling said function.
+
+[{ebnf-src}]
+----
+FunctionDef = "def" {ltype} {lident} "(" <<ParameterList>> ")" {lblock} "end" ;
+----
+
+### Overloading
+
+Function declarations can be overloaded. To do this, simply declare a new function with the same name, but with a different signature.
+
+IMPORTANT: For overloading, only the parameters are relevant in the signature, overloading based on the returntype is not valid.
+
+[[ParameterList]]
+### Parameter declaration
+
+Parameters declare the inputs of a function; they use a identifier to bind a name to a type and a initial value.
+
+[{ebnf-src}]
+----
+ParameterList         = ParameterOrVarargDecl { "," ParameterOrVarargDecl } [ "," ] ;
+ParameterOrVarargDecl = ParameterDecl | <<VarargDecl>> ;
+ParameterDecl         = {ltype} {lident} [ "=" {lexpr} ] ;
+----
+
+[[VarargDecl]]
+#### Varargs
+
+There are two variants of vararg declarations: a typed vararg and a untyped vararg declaration.
+
+[{ebnf-src}]
+----
+VarargDecl = [ {ltype} ] "..." {lident} ;
+----
+
+If a type is added before the `...` token, it is an typed vararg, which makes the parameter a typed iterateable of the specified type. Otherwise it is an iterateable with the type of `any`.
+
+Theres also a special link:./expressions#ArgumentsExpr[`arguments`] keyword.
+
+[[TypeParamsDecl]]
+## Type parameter declaration
+
+With a type parameter list, type parameters of a generic function or type are declared. Each entry of this list can either be a **value type-parameter** or a **type type-parameter**.
+
+[{ebnf-src}]
+----
+TypeParamsDecl       = "[" TypeParamDecl { "," TypeParamDecl } "]" ;
+TypeParamDecl        = TypeParamLiteral | TypeParamTypeDecl ;
+TypeParamLiteralDecl = ( "const" | {ltype} ) {lident} [ "=" {lexpr} ] ;
+TypeParamTypeDecl    = {lident} [ "=>" {lident} { "," {lident} } ] [ "=" {lident} ] ;
+----
+
+The difference between the two is simple:
+
+- a **value type-parameter** is a constant, compile time known value that is used in the generic declaration. Allows to specify a default value to be used; the expression needs to be constant and be calculateable at compile time.
+
+- a **type type-parameter** is another type which can be used to substitute types inside the generic declaration. This can constaint any number of constraints after the `=>`, including parent types for inheritance or roles needing to be implemented. Allows to specify a default type to be used if none is supplied.
+
+[source,lapyst]
+----
+shape StaticArray of [ T , ulong size ]
+    carray[T, size] content;
+    def ulong length()
+        return size;
+    end
+end
+----
+
+## Structured member declarations
+
+[[FieldDecl]]
+### Field declarations
+
+Declares a link:./types#fields[field].
+
+[{ebnf-src}]
+----
+FieldDecl = [ "static" ] "var" {ltype} @( <<Visibility>> {lident} ) [ "=" {lexpr} ] ";" ;
+----
+
+[[Method]]
+### Method declarations
+
+Declares a link:./types#methods[method].
+
+[{ebnf-src}]
+----
+Method     = MethodDecl | MethodDef ;
+MethodDecl = "dec" [ "static" ] {ltype} @( <<Visibility>> {lident} ) "(" <<ParameterList>> ")" ;
+MethodDef  = "def" [ "static" ] {ltype} @( <<Visibility>> {lident} ) "(" <<ParameterList>> ")" {lblock} "end" ;
+----
+
+[[Property]]
+### Property declarations
+
+Declares a link:./types#properties[property].
+
+[{ebnf-src}]
+----
+Property           = [ "static" ] "prop" {ltype} @( <<Visibility>> {lident} ) [ PropertyGetter ] [ PropertySetter ] "end" ;
+
+PropertyGetter     = PropertyGetterDecl | PropertyGetterDef ;
+PropertyGetterDecl = "dec" {ltype} "get" "(" ")" ;
+PropertyGetterDef  = "def" {ltype} "get" "(" ")" {lblock} "end" ;
+
+PropertySetter     = PropertySetterDecl | PropertySetterDef ;
+PropertySetterDecl = "dec" "set" "(" {ltype} {lident} ")" ;
+PropertySetterDef  = "def" "set" "(" {ltype} {lident} ")" {lblock} "end" ;
+----
+
+NOTE: It is implemention defined if the compiler implements getter/setter by closely parsing this as specified or by parsing "normal" functions and then emit errors for non-compliant getter/setters. As an example, lapystc is doing the later.
+
+[[Constructor]]
+### Constructor declarations
+
+Declares an link:./types#constructors[constructor].
+
+[{ebnf-src}]
+----
+Constructor     = ConstructorDecl | ConstructorDef ;
+ConstructorDecl = "dec" @( <<Visibility>> "self" [ "::" {lident} ] ) "(" <<ParameterList>> ")" ;
+ConstructorDef  = "def" @( <<Visibility>> "self" [ "::" {lident} ] ) "(" <<ParameterList>> ")" {lblock} "end" ;
+----
+
+[source,lapyst]
+----
+shape A
+    dec self();
+    dec self::other();
+end
+----
+
+[[Destructor]]
+### Destructor declarations
+
+Declares an link:./types#destructors[destructor].
+
+[{ebnf-src}]
+----
+Destructor     = DestructorDecl | DestructorDef ;
+DestructorDecl = "dec" {ltype} @( <<Visibility>> "~" "self" ) "(" <<ParameterList>> ")" ;
+DestructorDef  = "def" {ltype} @( <<Visibility>> "~" "self" ) "(" <<ParameterList>> ")" {lblock} "end" ;
+----
+
+[source,lapyst]
+----
+shape A
+    dec void ~self();
+end
+----
+
+[[ShapeDecl]]
+## Shape declarations
+
+Declares a link:./types#shape_types[shape type].
+
+[{ebnf-src}]
+----
+ShapeDecl     = "shape" identifier [ "of" <<TypeParamsDecl>> ] [ InheritanceDecl ] { ShapeBodyDecl } "end" ;
+ShapeBodyDecl = <<Constructor>> | <<FieldDecl>> | <<Method>> | <<Property>> | link:./statements#IncludeStmt[IncludeStmt] ;
+
+InheritanceDecl = "use" "[" {ltype} { "," {ltype} } "]" ;
+
+Visibility = [ "!" | @( "*" { "*" } ) ] ;
+----
+
+## Role declarations
+
+Declares a link:./types#role_types[role rype].
+
+[{ebnf-src}]
+----
+RoleType   = "role" {lident} { RoleElem [ ";" ] } ;
+RoleElem   = <<FunctionDecl>> ;
+----
+
+## Enum declarations
+
+Enum declarations declare special shapes which only allow a predefined set of instances to exist.
+
+[NOTE.wip]
+TODO: tinker with these to see how "backed" enums should work...
+
+[[NamespaceDecl]]
+## Namespace declarations
+
+A namespace declaration is used to group together other declarations. It also adds the name of the namespace before all names of declarations inside them before it in the fully qualified name of these declarations.
+
+[{ebnf-src}]
+----
+NamespaceDecl = "namespace" {lident} { <<TopLevelDecl>> } "end" ;
+----
+
+[source,lapyst]
+----
+namespace MyLib
+    # With 'MyLib::myFunc' the rest of the code
+    # can now refer to this function.
+    def void myFunc()
+    end
+end
+----
+
+## Module declarations
+
+Declares a reuseable portion of code that even can refer to things that are only present in the place where they're included. To include a module, see the link:./statements#IncludeStmt[`include` statement].
+
+[{ebnf-src}]
+----
+ModuleDecl = "module" {lident} {lblock} "end" ;
+----
+
+[source,lapyst]
+----
+module A
+    def say()
+        # ...
+    end
+end
+----

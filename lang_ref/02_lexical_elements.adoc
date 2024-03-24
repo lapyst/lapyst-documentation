@@ -1,0 +1,183 @@
+:icons: font
+:source-highlighter: rouge
+:toc:
+:toc-placement!:
+:websiteflags: norun
+:ebnf-src: source,ebnf,subs="+attributes,+macros"
+:ldecdigit: link:./introduction#letters_and_digits[dec_digit]
+:lbindigit: link:./introduction#letters_and_digits[bin_digit]
+:loctdigit: link:./introduction#letters_and_digits[oct_digit]
+:lhexdigit: link:./introduction#letters_and_digits[hex_digit]
+
+## Lexical elements
+
+toc::[]
+
+### Comments
+
+There two forms of comments:
+
+- Line based comments that start with either `#` or `//` and continue until the end of the current line
+- and block comments that start with `/*` and continue until the sequence `*/` is found.
+
+Comments cannot start inside string-ish literals (including characters and regexes).
+
+[source,lapyst]
+----
+// this is a line not processed
+# this line too
+
+/*
+ And here we have an whole region of the file
+ that's not processed!
+*/
+----
+
+#### Doc-Comments
+
+Doc comments are a special sub-variant of comments: they are intended for documentation of all declarative elements and are supported by all offical lapyst tooling (when applicable, such as documentation generators).
+
+Doc comments come in two variants:
+- Block doc-comments are like start like a regular block comment, but have an extra `*` in their opening tag: `/**`.
+- Line doc-comments start with `///` instead of the normal `//` and in addition group together, as long as there is no non-doc comment line inbetween two doc comment lines.
+
+### Tokens
+
+[NOTE.wip]
+explain this
+
+### Semicolons
+
+Lapyst uses semicolons `;` as terminators in a number of productions in the languages grammar. There are no rules or cases where you can omit them.
+
+[[identifiers]]
+### Identifiers
+
+A identifier is used to name (or 'identify') entities from each other inside a program.
+
+[source,ebnf]
+----
+identifier = letter { letter | unicode_digit } ;
+----
+
+### Keywords
+
+The following keywords are reserved and cannot be used as identifiers.
+
+```
+arguments    else      in            redo       then
+as           elsif     include       retry      throw
+break        end       instanceof    return     to
+case         ensure    macro         role       true
+cast         enum      module        self       try
+catch        export    namespace     shape      unit
+const        false     next          shapeof    unless
+dec          for       new           static     use
+def          from      nil           step       var
+default      if        of            super      while
+do           import    prop          switch
+```
+
+### Operators and punctuation
+
+```
++    &    +=    &=    &&   &&=   ==   ===   (   )
+-    |    -=    |=    ||   ||=   !=   !==   [   ]
++    ^    *=    ^=    ??   ??=   <    <=    {   }
+**   <<   **=   <<=   ++         >    >=    ,   ;
+/    >>   /=    >>=   --         =    ...   .   :
+%    ~    %=                     !    =~
+```
+
+[[int_lit]]
+### Integer literals
+
+Integer literals are a sequence of digits representing an integer. Optional prefixes sets non-decimal bases: `0b` or `0B` for binary, `0o` or `0O` for octal, `0x` or `0X` for hexadecimal. A single `0` is considered a decimal zero. In hexadecimal literals, letters `a` through `f` and `A` through `F` represent values 10 through 15.
+
+For readability, underscore characters _ may appear after a base prefix or between digits; these underscores do not change the value the integer literal represent.
+
+[{ebnf-src}]
+----
+int_lit = dec_lit | bin_lit | oct_lit | hex_lit ;
+dec_lit = "0" | ( "1" ... "9" ) [ [ "_" ] dec_digits ] ;
+bin_lit = "0" ( "b" | "B" ) { "_" } bin_digits ;
+oct_lit = "0" ( "o" | "O" ) { "_" } oct_digits ;
+hex_lit = "0" ( "x" | "X" ) { "_" } hex_digits ;
+
+dec_digits = {ldecdigit} { { "_" } {ldecdigit} } ;
+bin_digits = {lbindigit} { { "_" } {lbindigit} } ;
+oct_digits = {loctdigit} { { "_" } {loctdigit} } ;
+hex_digits = {lhexdigit} { { "_" } {lhexdigit} } ;
+----
+
+### Floating-point literals
+
+Floating point literals consists of an integer part (decimal digits), a decimal point, a fractional part (decimal digits), and an exponent part (e or E followed by an optional sign and decimal digits). One of the integer part or the fractional part may be omitted; one of the decimal point or the exponent part may be omitted. An exponent value exp scales the mantissa (integer and fractional part) by 10^exp^.
+
+For readability, underscore characters _ may appear between digits; these underscores do not change the value the float literal represent.
+
+[{ebnf-src}]
+----
+float_lit =
+    <<int_lit,dec_digits>> "." [ <<int_lit,dec_digits>> ] [ decimal_exponent ] |
+    <<int_lit,dec_digits>> decimal_exponent |
+    "." <<int_lit,dec_digits>> [ decimal_exponent ] ;
+
+decimal_exponent = ( "e" | "E" ) [ "+" | "-" ] <<int_lit,dec_digits>> ;
+----
+
+### Character literals
+
+A character literal (sometimes also refered to as a rune literal), is used to represent a single character / rune. They are at most one unicode character long in the source, except they are a escaped char.
+
+Escaped chars are a special series of characters in the source to represent an single character, which most of the time are unprintable in the source.
+
+[NOTE.wip]
+explain escaped chars more
+
+```
+\a  U+0007 alert or bell
+\b  U+0008 backspace
+\f  U+000C form feed
+\n  U+000A line feed or newline
+\r  U+000D carriage return
+\t  U+0009 horizontal tab
+\v  U+000B vertical tab
+\\  U+005C backslash
+\'  U+0027 single quote
+\"  U+0022 double quote
+```
+
+Any unrecognized character after a backslash in a character literal is considered a error.
+
+[{ebnf-src}]
+----
+char_lit       = "'" ( unicode_value | byte_value ) "'" ;
+
+unicode_value  = link:./introduction#characters[unicode_char] | little_u_value | escaped_char ;
+byte_value     = hex_byte_value;
+hex_byte_value = `\` "x" {lhexdigit} {lhexdigit} ;
+little_u_value = `\` "u" ( "{" { {lhexdigit} } "}" | {lhexdigit} {lhexdigit} {lhexdigit} {lhexdigit} ) ;
+escaped_char   = `\` ( "a" | "b" | "f" | "n" | "r" | "t" | "v" | `\` | "'" | `"` ) ;
+----
+
+### String literals
+
+[NOTE.wip]
+TODO: document this
+
+[source,ebnf]
+----
+string_lit = `"` { unicode_value | byte_value } `"` ;
+----
+
+### Boolean literals
+
+The keywords `true` and `false` are used to express the builtin link:./types#_boolean_types[boolean type].
+
+### The nil literal
+
+The keyword `nil` is specially used in mutliple places to represent the absence of an normal value.
+
+[NOTE.wip]
+TODO: add more documentation maybe?
